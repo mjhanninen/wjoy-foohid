@@ -3,3 +3,6 @@
 
 # Xcode user settings & state
 xcuserdata/
+
+# Xcode produces these when building from the command line
+build/
