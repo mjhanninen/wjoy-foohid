@@ -7,7 +7,6 @@
 //
 
 #import <Wiimote/Wiimote.h>
-#import <UpdateChecker/UAppUpdateChecker.h>
 
 #import "NotificationCenter.h"
 
@@ -90,12 +89,6 @@
                                    name:WiimoteDisconnectedNotification
                                  object:nil];
 
-    [[NSNotificationCenter defaultCenter]
-                                addObserver:self
-                                   selector:@selector(onCheckNewVersionFinished:)
-                                       name:UAppUpdateCheckerDidFinishNotification
-                                     object:nil];
-
     [UserNotificationCenter setDelegate:self];
 
     [UserNotificationCenter
@@ -160,39 +153,6 @@
         deliver:[UserNotification
                     userNotificationWithTitle:@"Wiimote disconnected"
                                          text:@"One of connected Wiimotes disconnected :("]];
-}
-
-- (void)onCheckNewVersionFinished:(NSNotification*)notification
-{
-    NSError     *err            = [[notification userInfo] objectForKey:UAppUpdateCheckerErrorKey];
-    NSNumber    *hasNewVersion  = [[notification userInfo] objectForKey:UAppUpdateCheckerHasNewVersionKey];
-    NSURL       *url            = [[notification userInfo] objectForKey:UAppUpdateCheckerDownloadURLKey];
-
-    if(err != nil)
-    {
-        [UserNotificationCenter
-            deliver:[UserNotification
-                        userNotificationWithTitle:@"Error"
-                                             text:@"Can't check for update"]];
-
-        return;
-    }
-
-    if([hasNewVersion boolValue])
-    {
-        UserNotification *notification = [UserNotification
-                                                userNotificationWithTitle:@"New version available!"
-                                                                     text:@"New version available!"
-                                                                 userInfo:[NSDictionary dictionaryWithObject:[url absoluteString] forKey:@"URL"]];
-
-        [UserNotificationCenter deliver:notification];
-        return;
-    }
-
-    [UserNotificationCenter
-            deliver:[UserNotification
-                        userNotificationWithTitle:@"No new version available"
-                                             text:@"No new version available :("]];
 }
 
 @end

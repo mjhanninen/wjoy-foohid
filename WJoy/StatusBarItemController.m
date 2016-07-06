@@ -8,8 +8,6 @@
 
 #import <Wiimote/Wiimote.h>
 
-#import <UpdateChecker/UAppUpdateChecker.h>
-
 #import "StatusBarItemController.h"
 #import "LoginItemsList.h"
 
@@ -60,13 +58,6 @@
     [m_Menu setDelegate:(id)self];
     [m_DiscoveryMenuItem release];
 
-    m_CheckUpdateMenuItem = [[NSMenuItem alloc]
-                                        initWithTitle:@"Check for update"
-                                               action:@selector(checkForUpdate)
-                                        keyEquivalent:@""];
-
-    [m_CheckUpdateMenuItem setTarget:self];
-
     NSImage *icon = [[[NSApplication sharedApplication] applicationIconImage] copy];
 
     [icon setScalesWhenResized:YES];
@@ -77,18 +68,6 @@
     [m_Item setHighlightMode:YES];
 
     [icon release];
-
-    [[NSNotificationCenter defaultCenter]
-                                addObserver:self
-                                   selector:@selector(onStartCheckUpdate)
-                                       name:UAppUpdateCheckerWillStartNotification
-                                     object:nil];
-
-    [[NSNotificationCenter defaultCenter]
-                                addObserver:self
-                                   selector:@selector(onFinishCheckUpdate)
-                                       name:UAppUpdateCheckerDidFinishNotification
-                                     object:nil];
 
     [Wiimote setUseOneButtonClickConnection:
                 [[NSUserDefaults standardUserDefaults] boolForKey:@"OneButtonClickConnection"]];
@@ -124,21 +103,6 @@
     [[NSUserDefaults standardUserDefaults]
                                         setBool:[Wiimote isUseOneButtonClickConnection]
                                          forKey:@"OneButtonClickConnection"];
-}
-
-- (void)checkForUpdate
-{
-    [[UAppUpdateChecker sharedInstance] run];
-}
-
-- (void)onStartCheckUpdate
-{
-    [m_CheckUpdateMenuItem setEnabled:NO];
-}
-
-- (void)onFinishCheckUpdate
-{
-    [m_CheckUpdateMenuItem setEnabled:YES];
 }
 
 - (void)menuNeedsUpdate:(NSMenu*)menu
