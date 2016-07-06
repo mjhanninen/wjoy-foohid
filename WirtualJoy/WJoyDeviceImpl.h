@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <IOKit/IOKitLib.h>
 
 typedef enum
 {
@@ -21,23 +20,19 @@ typedef enum
 
 typedef enum
 {
-	FOOHID_CREATE	= 0,
-	FOOHID_DESTROY	= 1,
-	FOOHID_SEND		= 2,
-	FOOHID_LIST		= 3
+    FOOHID_CREATE   = 0,
+    FOOHID_DESTROY  = 1,
+    FOOHID_SEND     = 2,
+    FOOHID_LIST     = 3
 } FOOHIDMethodSelector;
 
 @interface WJoyDeviceImpl : NSObject
 {
     @private
-        io_connect_t m_Connection;
+    io_connect_t m_Connection;
 }
 
 + (BOOL)prepare;
-
-- (BOOL)call:(WJoyDeviceMethodSelector)selector;
-- (BOOL)call:(WJoyDeviceMethodSelector)selector data:(NSData*)data;
-- (BOOL)call:(WJoyDeviceMethodSelector)selector string:(NSString*)string;
 
 @end
 
