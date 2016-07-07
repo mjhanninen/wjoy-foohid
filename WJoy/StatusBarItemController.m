@@ -78,7 +78,6 @@
 - (void)dealloc
 {
     [[NSStatusBar systemStatusBar] removeStatusItem:m_Item];
-    [m_CheckUpdateMenuItem release];
     [m_Item release];
     [m_Menu release];
     [super dealloc];
@@ -197,9 +196,6 @@
     [m_Menu addItem:[NSMenuItem separatorItem]];
     [m_Menu addItem:item];
     [item release];
-
-    [m_Menu addItem:[NSMenuItem separatorItem]];
-    [m_Menu addItem:m_CheckUpdateMenuItem];
 
     item = [[NSMenuItem alloc] initWithTitle:@"Quit" action:@selector(terminate:) keyEquivalent:@""];
     [item setTarget:[NSApplication sharedApplication]];
