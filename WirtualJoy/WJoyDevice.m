@@ -10,17 +10,14 @@
 
 #import "WJoyDeviceImpl.h"
 
-NSString *WJoyDeviceVendorIDKey             = @"WJoyDeviceVendorIDKey";
-NSString *WJoyDeviceProductIDKey            = @"WJoyDeviceProductIDKey";
-NSString *WJoyDeviceProductStringKey        = @"WJoyDeviceProductStringKey";
-NSString *WJoyDeviceSerialNumberStringKey   = @"WJoyDeviceSerialNumberStringKey";
+NSString *WJoyDeviceVendorIDKey = @"WJoyDeviceVendorIDKey";
+NSString *WJoyDeviceProductIDKey = @"WJoyDeviceProductIDKey";
+NSString *WJoyDeviceProductStringKey = @"WJoyDeviceProductStringKey";
+NSString *WJoyDeviceSerialNumberStringKey = @"WJoyDeviceSerialNumberStringKey";
 
 @implementation WJoyDevice
 
-+ (BOOL)prepare
-{
-    return [WJoyDeviceImpl prepare];
-}
++ (BOOL)prepare { return [WJoyDeviceImpl prepare]; }
 
 - (id)init
 {
@@ -28,48 +25,54 @@ NSString *WJoyDeviceSerialNumberStringKey   = @"WJoyDeviceSerialNumberStringKey"
     return nil;
 }
 
-- (id)initWithHIDDescriptor:(NSData*)HIDDescriptor
+- (id)initWithHIDDescriptor:(NSData *)HIDDescriptor
 {
     return [self initWithHIDDescriptor:HIDDescriptor properties:nil];
 }
 
-- (id)initWithHIDDescriptor:(NSData*)HIDDescriptor productString:(NSString*)productString
+- (id)initWithHIDDescriptor:(NSData *)HIDDescriptor
+              productString:(NSString *)productString
 {
-    NSDictionary *properties = [NSDictionary
-                                        dictionaryWithObject:productString
-                                                      forKey:WJoyDeviceProductStringKey];
+    NSDictionary *properties =
+        [NSDictionary dictionaryWithObject:productString
+                                    forKey:WJoyDeviceProductStringKey];
 
     return [self initWithHIDDescriptor:HIDDescriptor properties:properties];
 }
 
-- (id)initWithHIDDescriptor:(NSData*)HIDDescriptor properties:(NSDictionary*)properties
+- (id)initWithHIDDescriptor:(NSData *)HIDDescriptor
+                 properties:(NSDictionary *)properties
 {
     self = [super init];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
-    uint32_t     vendorID           = [[properties objectForKey:WJoyDeviceVendorIDKey] unsignedIntegerValue];
-    uint32_t     productID          = [[properties objectForKey:WJoyDeviceProductIDKey] unsignedIntegerValue];
-    NSString    *productString      = [properties objectForKey:WJoyDeviceProductStringKey];
-    NSString    *serialNumberString = [properties objectForKey:WJoyDeviceSerialNumberStringKey];
+    uint32_t vendorID =
+        [[properties objectForKey:WJoyDeviceVendorIDKey] unsignedIntegerValue];
+    uint32_t productID =
+        [[properties objectForKey:WJoyDeviceProductIDKey] unsignedIntegerValue];
+    NSString *productString =
+        [properties objectForKey:WJoyDeviceProductStringKey];
+    NSString *serialNumberString =
+        [properties objectForKey:WJoyDeviceSerialNumberStringKey];
 
     m_Impl = [[WJoyDeviceImpl alloc] init];
-    if(m_Impl == nil)
+    if (m_Impl == nil)
     {
         [self release];
         return nil;
     }
 
-    if(productString != nil)
+    if (productString != nil)
         [m_Impl setDeviceProductString:productString];
 
-    if(serialNumberString != nil)
+    if (serialNumberString != nil)
         [m_Impl setDeviceSerialNumberString:serialNumberString];
 
-    if(vendorID != 0 || productID != 0)
+    if (vendorID != 0 || productID != 0)
         [m_Impl setDeviceVendorID:vendorID productID:productID];
 
-    if(![m_Impl enable:HIDDescriptor])
+    if (![m_Impl enable:HIDDescriptor])
     {
         [self release];
         return nil;
@@ -86,12 +89,9 @@ NSString *WJoyDeviceSerialNumberStringKey   = @"WJoyDeviceSerialNumberStringKey"
     [super dealloc];
 }
 
-- (NSDictionary*)properties
-{
-    return [[m_Properties retain] autorelease];
-}
+- (NSDictionary *)properties { return [[m_Properties retain] autorelease]; }
 
-- (BOOL)updateHIDState:(NSData*)HIDState
+- (BOOL)updateHIDState:(NSData *)HIDState
 {
     return [m_Impl updateState:HIDState];
 }

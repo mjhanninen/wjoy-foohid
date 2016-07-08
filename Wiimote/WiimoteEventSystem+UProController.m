@@ -12,22 +12,29 @@
 + (void)load
 {
     [WiimoteEventSystem
-            registerNotification:WiimoteUProControllerButtonPressedNotification
-                        selector:@selector(wiimoteUProControllerButtonPressedNotification:)];
+        registerNotification:WiimoteUProControllerButtonPressedNotification
+                    selector:
+                        @selector(
+                            wiimoteUProControllerButtonPressedNotification:)];
 
     [WiimoteEventSystem
-            registerNotification:WiimoteUProControllerButtonReleasedNotification
-                        selector:@selector(wiimoteUProControllerButtonReleasedNotification:)];
+        registerNotification:WiimoteUProControllerButtonReleasedNotification
+                    selector:
+                        @selector(
+                            wiimoteUProControllerButtonReleasedNotification:)];
 
     [WiimoteEventSystem
-            registerNotification:WiimoteUProControllerStickPositionChangedNotification
-                        selector:@selector(wiimoteUProControllerStickPositionChangedNotification:)];
+        registerNotification:
+            WiimoteUProControllerStickPositionChangedNotification
+                    selector:
+                        @selector(
+                            wiimoteUProControllerStickPositionChangedNotification:
+                                )];
 }
 
-- (NSString*)pathForWiiUProControllerButton:(NSDictionary*)userInfo
+- (NSString *)pathForWiiUProControllerButton:(NSDictionary *)userInfo
 {
-    static NSString *result[] =
-    {
+    static NSString *result[] = {
         @"Button.Up",
         @"Button.Down",
         @"Button.Left",
@@ -44,31 +51,40 @@
         @"Button.Right.Stick"
     };
 
-    WiimoteUProControllerButtonType type = [[userInfo objectForKey:WiimoteUProControllerButtonKey] integerValue];
+    WiimoteUProControllerButtonType type =
+        [[userInfo objectForKey:WiimoteUProControllerButtonKey] integerValue];
 
     return result[type];
 }
 
-- (void)wiimoteUProControllerButtonPressedNotification:(NSNotification*)notification
+- (void)wiimoteUProControllerButtonPressedNotification:
+    (NSNotification *)notification
 {
     [self postEventForWiimoteExtension:[notification object]
-                                  path:[self pathForWiiUProControllerButton:[notification userInfo]]
+                                  path:[self pathForWiiUProControllerButton:
+                                                 [notification userInfo]]
                                  value:WIIMOTE_EVENT_VALUE_PRESS];
 }
 
-- (void)wiimoteUProControllerButtonReleasedNotification:(NSNotification*)notification
+- (void)wiimoteUProControllerButtonReleasedNotification:
+    (NSNotification *)notification
 {
     [self postEventForWiimoteExtension:[notification object]
-                                  path:[self pathForWiiUProControllerButton:[notification userInfo]]
+                                  path:[self pathForWiiUProControllerButton:
+                                                 [notification userInfo]]
                                  value:WIIMOTE_EVENT_VALUE_RELEASE];
 }
 
-- (void)wiimoteUProControllerStickPositionChangedNotification:(NSNotification*)notification
+- (void)wiimoteUProControllerStickPositionChangedNotification:
+    (NSNotification *)notification
 {
-    WiimoteUProControllerStickType  type      = [[[notification userInfo] objectForKey:WiimoteUProControllerStickKey] integerValue];
-    NSPoint                         position  = [[[notification userInfo] objectForKey:WiimoteUProControllerStickPositionKey] pointValue];
+    WiimoteUProControllerStickType type = [[[notification userInfo]
+        objectForKey:WiimoteUProControllerStickKey] integerValue];
+    NSPoint position = [[[notification userInfo]
+        objectForKey:WiimoteUProControllerStickPositionKey] pointValue];
 
-    switch(type) {
+    switch (type)
+    {
         case WiimoteUProControllerStickTypeLeft:
             [self postEventForWiimoteExtension:[notification object]
                                           path:@"Left.Stick.X"

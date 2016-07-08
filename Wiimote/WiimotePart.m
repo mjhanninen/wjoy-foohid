@@ -10,10 +10,7 @@
 
 @implementation WiimotePart
 
-+ (void)registerPartClass:(Class)cls
-{
-    [WiimotePartSet registerPartClass:cls];
-}
++ (void)registerPartClass:(Class)cls { [WiimotePartSet registerPartClass:cls]; }
 
 - (id)init
 {
@@ -21,51 +18,33 @@
     return nil;
 }
 
-- (id)initWithOwner:(Wiimote*)owner
-    eventDispatcher:(WiimoteEventDispatcher*)dispatcher
-          ioManager:(WiimoteIOManager*)ioManager
+- (id)initWithOwner:(Wiimote *)owner
+    eventDispatcher:(WiimoteEventDispatcher *)dispatcher
+          ioManager:(WiimoteIOManager *)ioManager
 {
     self = [super init];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
-    m_Owner             = owner;
-    m_EventDispatcher   = dispatcher;
-    m_IOManager         = ioManager;
+    m_Owner = owner;
+    m_EventDispatcher = dispatcher;
+    m_IOManager = ioManager;
 
     return self;
 }
 
-- (Wiimote*)owner
-{
-    return m_Owner;
-}
+- (Wiimote *)owner { return m_Owner; }
 
-- (WiimoteIOManager*)ioManager
-{
-    return m_IOManager;
-}
+- (WiimoteIOManager *)ioManager { return m_IOManager; }
 
-- (WiimoteEventDispatcher*)eventDispatcher
-{
-    return m_EventDispatcher;
-}
+- (WiimoteEventDispatcher *)eventDispatcher { return m_EventDispatcher; }
 
-- (NSSet*)allowedReportTypeSet
-{
-    return nil;
-}
+- (NSSet *)allowedReportTypeSet { return nil; }
 
-- (void)connected
-{
-}
+- (void)connected {}
 
-- (void)handleReport:(WiimoteDeviceReport*)report
-{
-}
+- (void)handleReport:(WiimoteDeviceReport *)report {}
 
-- (void)disconnected
-{
-}
+- (void)disconnected {}
 
 @end

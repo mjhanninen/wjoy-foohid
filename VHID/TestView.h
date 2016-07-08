@@ -10,8 +10,7 @@
 
 @class TestView;
 
-typedef enum
-{
+typedef enum {
     TestViewKeyUp,
     TestViewKeyDown,
     TestViewKeyLeft,
@@ -20,14 +19,14 @@ typedef enum
 
 @protocol TestViewDelegate
 
-- (void)testView:(TestView*)view keyPressed:(TestViewKey)key;
+- (void)testView:(TestView *)view keyPressed:(TestViewKey)key;
 
 @end
 
 @interface TestView : NSView
 {
-    @private
-        id<TestViewDelegate> m_Delegate;
+  @private
+    id<TestViewDelegate> m_Delegate;
 }
 
 - (id<TestViewDelegate>)delegate;

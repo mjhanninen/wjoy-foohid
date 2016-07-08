@@ -12,13 +12,13 @@
 
 @interface WiimoteLEDPart : WiimotePart
 {
-    @private
-        WiimoteDevice *m_Device;
+  @private
+    WiimoteDevice *m_Device;
 }
 
 - (NSUInteger)highlightedLEDMask;
 - (void)setHighlightedLEDMask:(NSUInteger)mask;
 
-- (void)setDevice:(WiimoteDevice*)device;
+- (void)setDevice:(WiimoteDevice *)device;
 
 @end

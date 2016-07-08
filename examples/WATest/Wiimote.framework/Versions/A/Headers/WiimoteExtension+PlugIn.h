@@ -6,18 +6,17 @@
 //  Copyright 2012 alxn1. All rights reserved.
 //
 
+#import <Wiimote/WiimoteEventDispatcher.h>
 #import <Wiimote/WiimoteExtension.h>
 #import <Wiimote/WiimoteIOManager.h>
-#import <Wiimote/WiimoteEventDispatcher.h>
 
-typedef enum
-{
-    WiimoteExtensionMeritClassMotionPlus    = 1,
-    WiimoteExtensionMeritClassSystemHigh    = 1000,
-    WiimoteExtensionMeritClassUserHigh      = 10000,
-    WiimoteExtensionMeritClassSystem        = 100000,
-    WiimoteExtensionMeritClassUser          = 1000000,
-    WiimoteExtensionMeritClassUnknown       = 10000000
+typedef enum {
+    WiimoteExtensionMeritClassMotionPlus = 1,
+    WiimoteExtensionMeritClassSystemHigh = 1000,
+    WiimoteExtensionMeritClassUserHigh = 10000,
+    WiimoteExtensionMeritClassSystem = 100000,
+    WiimoteExtensionMeritClassUser = 1000000,
+    WiimoteExtensionMeritClassUnknown = 10000000
 } WiimoteExtensionMeritClass;
 
 @interface WiimoteExtension (PlugIn)
@@ -27,27 +26,27 @@ typedef enum
 + (NSUInteger)merit;
 + (NSUInteger)minReportDataSize;
 
-+ (void)probe:(WiimoteIOManager*)ioManager
++ (void)probe:(WiimoteIOManager *)ioManager
        target:(id)target
        action:(SEL)action;
 
-- (id)initWithOwner:(Wiimote*)owner
-    eventDispatcher:(WiimoteEventDispatcher*)dispatcher;
+- (id)initWithOwner:(Wiimote *)owner
+    eventDispatcher:(WiimoteEventDispatcher *)dispatcher;
 
-- (WiimoteEventDispatcher*)eventDispatcher;
+- (WiimoteEventDispatcher *)eventDispatcher;
 
-- (void)calibrate:(WiimoteIOManager*)ioManager;
-- (void)handleReport:(const uint8_t*)extensionData length:(NSUInteger)length;
+- (void)calibrate:(WiimoteIOManager *)ioManager;
+- (void)handleReport:(const uint8_t *)extensionData length:(NSUInteger)length;
 - (void)disconnected;
 
 @end
 
 @interface WiimoteExtension (CalibrationUtils)
 
-- (BOOL)beginReadCalibrationData:(WiimoteIOManager*)ioManager
+- (BOOL)beginReadCalibrationData:(WiimoteIOManager *)ioManager
                      memoryRange:(NSRange)memoryRange;
 
-- (void)handleCalibrationData:(const uint8_t*)data length:(NSUInteger)length;
+- (void)handleCalibrationData:(const uint8_t *)data length:(NSUInteger)length;
 
 @end
 
@@ -55,15 +54,13 @@ typedef enum
 
 + (NSUInteger)nextFreedomMeritInClass:(WiimoteExtensionMeritClass)meritClass;
 
-+ (void)probeFinished:(BOOL)result
-               target:(id)target
-               action:(SEL)action;
++ (void)probeFinished:(BOOL)result target:(id)target action:(SEL)action;
 
 @end
 
 @interface WiimoteExtension (SubExtension)
 
-- (void)setSubExtension:(WiimoteExtension*)extension;
+- (void)setSubExtension:(WiimoteExtension *)extension;
 
 @end
 
@@ -72,7 +69,7 @@ typedef enum
 - (BOOL)isSupportMotionPlus;
 - (WiimoteDeviceMotionPlusMode)motionPlusMode;
 
-- (void)handleMotionPlusReport:(const uint8_t*)extensionData
+- (void)handleMotionPlusReport:(const uint8_t *)extensionData
                         length:(NSUInteger)length;
 
 @end

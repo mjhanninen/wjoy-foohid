@@ -10,10 +10,10 @@
 
 @interface VHIDButtonCollection : NSObject
 {
-    @private
-        NSUInteger       m_ButtonCount;
-        NSData          *m_Descriptor;
-        NSMutableData   *m_State;
+  @private
+    NSUInteger m_ButtonCount;
+    NSData *m_Descriptor;
+    NSMutableData *m_State;
 }
 
 + (NSUInteger)maxButtonCount;
@@ -26,7 +26,7 @@
 - (void)setButton:(NSUInteger)buttonIndex pressed:(BOOL)pressed;
 - (void)reset;
 
-- (NSData*)descriptor;
-- (NSData*)state;
+- (NSData *)descriptor;
+- (NSData *)state;
 
 @end

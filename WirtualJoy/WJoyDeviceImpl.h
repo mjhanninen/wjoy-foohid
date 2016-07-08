@@ -8,27 +8,25 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum
-{
-    WJoyDeviceMethodSelectorEnable                      = 0,
-    WJoyDeviceMethodSelectorDisable                     = 1,
-    WJoyDeviceMethodSelectorUpdateState                 = 2,
-    WJoyDeviceMethodSelectorSetDeviceProductString      = 3,
+typedef enum {
+    WJoyDeviceMethodSelectorEnable = 0,
+    WJoyDeviceMethodSelectorDisable = 1,
+    WJoyDeviceMethodSelectorUpdateState = 2,
+    WJoyDeviceMethodSelectorSetDeviceProductString = 3,
     WJoyDeviceMethodSelectorSetDeviceSerialNumberString = 4,
     WJoyDeviceMethodSelectorSetDeviceVendorAndProductID = 5
 } WJoyDeviceMethodSelector;
 
-typedef enum
-{
-    FOOHID_CREATE   = 0,
-    FOOHID_DESTROY  = 1,
-    FOOHID_SEND     = 2,
-    FOOHID_LIST     = 3
+typedef enum {
+    FOOHID_CREATE = 0,
+    FOOHID_DESTROY = 1,
+    FOOHID_SEND = 2,
+    FOOHID_LIST = 3
 } FOOHIDMethodSelector;
 
 @interface WJoyDeviceImpl : NSObject
 {
-    @private
+  @private
     io_connect_t m_Connection;
 }
 
@@ -38,13 +36,13 @@ typedef enum
 
 @interface WJoyDeviceImpl (Methods)
 
-- (BOOL)setDeviceProductString:(NSString*)string;
-- (BOOL)setDeviceSerialNumberString:(NSString*)string;
+- (BOOL)setDeviceProductString:(NSString *)string;
+- (BOOL)setDeviceSerialNumberString:(NSString *)string;
 - (BOOL)setDeviceVendorID:(uint32_t)vendorID productID:(uint32_t)productID;
 
-- (BOOL)enable:(NSData*)HIDDescriptor;
+- (BOOL)enable:(NSData *)HIDDescriptor;
 - (BOOL)disable;
 
-- (BOOL)updateState:(NSData*)HIDState;
+- (BOOL)updateState:(NSData *)HIDState;
 
 @end

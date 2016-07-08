@@ -13,51 +13,50 @@
 
 @interface WiimoteExtensionRoutineProbeHandler : WiimoteExtensionProbeHandler
 {
-    @private
-        NSArray *m_Signatures;
+  @private
+    NSArray *m_Signatures;
 }
 
-- (id)initWithIOManager:(WiimoteIOManager*)manager
-             signatures:(NSArray*)signatures
+- (id)initWithIOManager:(WiimoteIOManager *)manager
+             signatures:(NSArray *)signatures
                  target:(id)target
                  action:(SEL)action;
 
-- (void)ioManagerDataReaded:(NSData*)data;
+- (void)ioManagerDataReaded:(NSData *)data;
 
 @end
 
 @implementation WiimoteExtensionRoutineProbeHandler
 
-- (id)initWithIOManager:(WiimoteIOManager*)manager
-             signatures:(NSArray*)signatures
+- (id)initWithIOManager:(WiimoteIOManager *)manager
+             signatures:(NSArray *)signatures
                  target:(id)target
                  action:(SEL)action
 {
     self = [super initWithIOManager:manager target:target action:action];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
     m_Signatures = [signatures retain];
 
-    if(m_Signatures			== nil ||
-      [m_Signatures count]  == 0)
+    if (m_Signatures == nil || [m_Signatures count] == 0)
     {
         [self probeFinished:NO];
         [self release];
         return nil;
     }
 
-    if(![manager readMemory:NSMakeRange(
-								WiimoteDeviceRoutineExtensionProbeAddress,
-								[[m_Signatures objectAtIndex:0] length])
-                     target:self
-                     action:@selector(ioManagerDataReaded:)])
+    if (![manager
+            readMemory:NSMakeRange(WiimoteDeviceRoutineExtensionProbeAddress,
+                                   [[m_Signatures objectAtIndex:0] length])
+                target:self
+                action:@selector(ioManagerDataReaded:)])
     {
         W_ERROR(@"[WiimoteIOManager readMemory: target: action:] failed");
         [self probeFinished:NO];
         [self release];
         return nil;
-    } 
+    }
 
     return self;
 }
@@ -68,15 +67,15 @@
     [super dealloc];
 }
 
-- (void)ioManagerDataReaded:(NSData*)data
+- (void)ioManagerDataReaded:(NSData *)data
 {
-    if(data == nil)
+    if (data == nil)
     {
         [self release];
         return;
     }
 
-    if([data length] < [[m_Signatures objectAtIndex:0] length])
+    if ([data length] < [[m_Signatures objectAtIndex:0] length])
     {
         W_ERROR(@"readed data chunk too small");
         [self probeFinished:NO];
@@ -84,19 +83,20 @@
         return;
     }
 
-    BOOL		isOk			= NO;
-	NSUInteger	countSignatures = [m_Signatures count];
+    BOOL isOk = NO;
+    NSUInteger countSignatures = [m_Signatures count];
 
-	for(NSUInteger i = 0; i < countSignatures; i++)
-	{
-		if([[m_Signatures objectAtIndex:i] isEqualToData:data])
-		{
+    for (NSUInteger i = 0; i < countSignatures; i++)
+    {
+        if ([[m_Signatures objectAtIndex:i] isEqualToData:data])
+        {
             isOk = YES;
-			break;
-		}
-	}
+            break;
+        }
+    }
 
-    W_DEBUG_F(@"probe finished (%@): %@", data, ((isOk)?(@"Ok"):(@"Not Ok")));
+    W_DEBUG_F(@"probe finished (%@): %@", data,
+              ((isOk) ? (@"Ok") : (@"Not Ok")));
     [self probeFinished:isOk];
     [self release];
 }
@@ -105,28 +105,27 @@
 
 @implementation WiimoteExtensionProbeHandler
 
-+ (void)routineProbe:(WiimoteIOManager*)manager
-           signature:(NSData*)signature
++ (void)routineProbe:(WiimoteIOManager *)manager
+           signature:(NSData *)signature
               target:(id)target
               action:(SEL)action
 {
-	[[WiimoteExtensionRoutineProbeHandler alloc]
-										initWithIOManager:manager
-                                               signatures:[NSArray arrayWithObject:signature]
-												   target:target
-												   action:action];
+    [[WiimoteExtensionRoutineProbeHandler alloc]
+        initWithIOManager:manager
+               signatures:[NSArray arrayWithObject:signature]
+                   target:target
+                   action:action];
 }
 
-+ (void)routineProbe:(WiimoteIOManager*)manager
-		  signatures:(NSArray*)signatures
++ (void)routineProbe:(WiimoteIOManager *)manager
+          signatures:(NSArray *)signatures
               target:(id)target
               action:(SEL)action
 {
-	[[WiimoteExtensionRoutineProbeHandler alloc]
-										initWithIOManager:manager
-                                               signatures:signatures
-												   target:target
-												   action:action];
+    [[WiimoteExtensionRoutineProbeHandler alloc] initWithIOManager:manager
+                                                        signatures:signatures
+                                                            target:target
+                                                            action:action];
 }
 
 - (id)init
@@ -135,12 +134,12 @@
     return nil;
 }
 
-- (id)initWithIOManager:(WiimoteIOManager*)manager
+- (id)initWithIOManager:(WiimoteIOManager *)manager
                  target:(id)target
                  action:(SEL)action
 {
     self = [super init];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
     m_Target = target;

@@ -12,18 +12,18 @@
 
 @interface MainController : NSObject
 {
-    @private
-        IBOutlet NSWindow                               *window;
-        IBOutlet NSTextField                            *titleTextField;
-        IBOutlet NSTextField                            *textTextField;
-        IBOutlet NSMatrix                               *notificationSystemMatrix;
-        IBOutlet NSButton                               *afterDelayCheckBox;
-        IBOutlet NSButton                               *postNotificationButton;
-        IBOutlet NSButton                               *soundEnabledCheck;
-        IBOutlet UserNotificationCenterScreenCornerView *cornerView;
-        IBOutlet NSSlider                               *durationSlider;
+  @private
+    IBOutlet NSWindow *window;
+    IBOutlet NSTextField *titleTextField;
+    IBOutlet NSTextField *textTextField;
+    IBOutlet NSMatrix *notificationSystemMatrix;
+    IBOutlet NSButton *afterDelayCheckBox;
+    IBOutlet NSButton *postNotificationButton;
+    IBOutlet NSButton *soundEnabledCheck;
+    IBOutlet UserNotificationCenterScreenCornerView *cornerView;
+    IBOutlet NSSlider *durationSlider;
 
-        NSTimer                                         *growlAvailableCheckTimer;
+    NSTimer *growlAvailableCheckTimer;
 }
 
 - (IBAction)showNotification:(id)sender;

@@ -17,29 +17,26 @@
 - (void)onDiscoveryBegin;
 - (void)onDiscoveryEnd;
 - (void)onDeviceConnected;
-- (void)onDeviceBatteryStateChanged:(NSNotification*)notification;
+- (void)onDeviceBatteryStateChanged:(NSNotification *)notification;
 - (void)onDeviceDisconnected;
 
 @end
 
 @implementation NotificationCenter
 
-+ (void)start
-{
-    [[NotificationCenter alloc] initInternal];
-}
++ (void)start { [[NotificationCenter alloc] initInternal]; }
 
-- (BOOL)userNotificationCenter:(UserNotificationCenter*)center
-     shouldDeliverNotification:(UserNotification*)notification
+- (BOOL)userNotificationCenter:(UserNotificationCenter *)center
+     shouldDeliverNotification:(UserNotification *)notification
 {
     return YES;
 }
 
-- (void)userNotificationCenter:(UserNotificationCenter*)center
-           notificationClicked:(UserNotification*)notification
+- (void)userNotificationCenter:(UserNotificationCenter *)center
+           notificationClicked:(UserNotification *)notification
 {
     NSString *url = [[notification userInfo] objectForKey:@"URL"];
-    if(url != nil)
+    if (url != nil)
         [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:url]];
 }
 
@@ -56,45 +53,44 @@
 - (id)initInternal
 {
     self = [super init];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
     [[NSNotificationCenter defaultCenter]
-                            addObserver:self
-                               selector:@selector(onDiscoveryBegin)
-                                   name:WiimoteBeginDiscoveryNotification
-                                 object:nil];
+        addObserver:self
+           selector:@selector(onDiscoveryBegin)
+               name:WiimoteBeginDiscoveryNotification
+             object:nil];
 
     [[NSNotificationCenter defaultCenter]
-                            addObserver:self
-                               selector:@selector(onDiscoveryEnd)
-                                   name:WiimoteEndDiscoveryNotification
-                                 object:nil];
+        addObserver:self
+           selector:@selector(onDiscoveryEnd)
+               name:WiimoteEndDiscoveryNotification
+             object:nil];
 
     [[NSNotificationCenter defaultCenter]
-                            addObserver:self
-                               selector:@selector(onDeviceConnected)
-                                   name:WiimoteConnectedNotification
-                                 object:nil];
+        addObserver:self
+           selector:@selector(onDeviceConnected)
+               name:WiimoteConnectedNotification
+             object:nil];
 
     [[NSNotificationCenter defaultCenter]
-                            addObserver:self
-                               selector:@selector(onDeviceBatteryStateChanged:)
-                                   name:WiimoteBatteryLevelUpdatedNotification
-                                 object:nil];
+        addObserver:self
+           selector:@selector(onDeviceBatteryStateChanged:)
+               name:WiimoteBatteryLevelUpdatedNotification
+             object:nil];
 
     [[NSNotificationCenter defaultCenter]
-                            addObserver:self
-                               selector:@selector(onDeviceDisconnected)
-                                   name:WiimoteDisconnectedNotification
-                                 object:nil];
+        addObserver:self
+           selector:@selector(onDeviceDisconnected)
+               name:WiimoteDisconnectedNotification
+             object:nil];
 
     [UserNotificationCenter setDelegate:self];
 
     [UserNotificationCenter
-        deliver:[UserNotification
-                    userNotificationWithTitle:@"WJoy started"
-                                         text:@"We started :)"]];
+        deliver:[UserNotification userNotificationWithTitle:@"WJoy started"
+                                                       text:@"We started :)"]];
 
     return self;
 }
@@ -110,7 +106,8 @@
     [UserNotificationCenter
         deliver:[UserNotification
                     userNotificationWithTitle:@"Begin Discovery"
-                                         text:@"Begin discovery for new Wiimote :)"]];
+                                         text:@"Begin discovery for new "
+                                              @"Wiimote :)"]];
 }
 
 - (void)onDiscoveryEnd
@@ -118,7 +115,8 @@
     [UserNotificationCenter
         deliver:[UserNotification
                     userNotificationWithTitle:@"End Discovery"
-                                         text:@"Discovery for new Wiimote finished :)"]];
+                                         text:@"Discovery for new Wiimote "
+                                              @"finished :)"]];
 }
 
 - (void)onDeviceConnected
@@ -129,12 +127,11 @@
                                          text:@"New Wiimote connected :)"]];
 }
 
-- (void)onDeviceBatteryStateChanged:(NSNotification*)notification
+- (void)onDeviceBatteryStateChanged:(NSNotification *)notification
 {
     Wiimote *device = [notification object];
 
-    if([device userInfo] != nil ||
-      ![device isBatteryLevelLow])
+    if ([device userInfo] != nil || ![device isBatteryLevelLow])
     {
         return;
     }
@@ -142,9 +139,10 @@
     [device setUserInfo:[NSDictionary dictionary]];
 
     [UserNotificationCenter
-        deliver:[UserNotification
-                    userNotificationWithTitle:@"Wiimote battery is low"
-                                         text:@"Some Wiimote battery is low!!!"]];
+        deliver:
+            [UserNotification
+                userNotificationWithTitle:@"Wiimote battery is low"
+                                     text:@"Some Wiimote battery is low!!!"]];
 }
 
 - (void)onDeviceDisconnected
@@ -152,7 +150,8 @@
     [UserNotificationCenter
         deliver:[UserNotification
                     userNotificationWithTitle:@"Wiimote disconnected"
-                                         text:@"One of connected Wiimotes disconnected :("]];
+                                         text:@"One of connected Wiimotes "
+                                              @"disconnected :("]];
 }
 
 @end

@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 alxn1. All rights reserved.
 //
 
-#import "WiimoteProtocol.h"
 #import "WiimoteDeviceReport.h"
+#import "WiimoteProtocol.h"
 
 @class HIDDevice;
 @class IOBluetoothDevice;
@@ -19,52 +19,51 @@
 
 @interface NSObject (WiimoteDeviceDelegate)
 
-- (void)wiimoteDevice:(WiimoteDevice*)device handleReport:(WiimoteDeviceReport*)report;
-- (void)wiimoteDeviceDisconnected:(WiimoteDevice*)device;
+- (void)wiimoteDevice:(WiimoteDevice *)device
+         handleReport:(WiimoteDeviceReport *)report;
+- (void)wiimoteDeviceDisconnected:(WiimoteDevice *)device;
 
 @end
 
 @interface WiimoteDevice : NSObject
 {
-	@private
-		BOOL						 m_IsConnected;
+  @private
+    BOOL m_IsConnected;
 
-		WiimoteDeviceTransport      *m_Transport;
+    WiimoteDeviceTransport *m_Transport;
 
-        WiimoteDeviceReport			*m_Report;
-		WiimoteDeviceReadMemQueue	*m_ReadMemQueue;
+    WiimoteDeviceReport *m_Report;
+    WiimoteDeviceReadMemQueue *m_ReadMemQueue;
 
-        BOOL						 m_IsVibrationEnabled;
-        uint8_t                      m_LEDsState;
+    BOOL m_IsVibrationEnabled;
+    uint8_t m_LEDsState;
 
-		id							 m_Delegate;
+    id m_Delegate;
 }
 
-- (id)initWithHIDDevice:(HIDDevice*)device;
-- (id)initWithBluetoothDevice:(IOBluetoothDevice*)device;
+- (id)initWithHIDDevice:(HIDDevice *)device;
+- (id)initWithBluetoothDevice:(IOBluetoothDevice *)device;
 
 - (BOOL)isConnected;
 
 - (BOOL)connect;
 - (void)disconnect;
 
-- (NSString*)name;
-- (NSData*)address;
-- (NSString*)addressString;
+- (NSString *)name;
+- (NSData *)address;
+- (NSString *)addressString;
 
 - (id)lowLevelDevice;
 
 - (BOOL)postCommand:(WiimoteDeviceCommandType)command
-               data:(const uint8_t*)data
+               data:(const uint8_t *)data
              length:(NSUInteger)length;
 
 - (BOOL)writeMemory:(NSUInteger)address
-               data:(const uint8_t*)data
+               data:(const uint8_t *)data
              length:(NSUInteger)length;
 
-- (BOOL)readMemory:(NSRange)memoryRange
-            target:(id)target
-            action:(SEL)action;
+- (BOOL)readMemory:(NSRange)memoryRange target:(id)target action:(SEL)action;
 
 - (BOOL)requestStateReport;
 - (BOOL)requestReportType:(WiimoteDeviceReportType)type;

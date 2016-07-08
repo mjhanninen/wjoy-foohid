@@ -10,6 +10,7 @@
 
 @interface WiimoteEventDispatcher (Battery)
 
-- (void)postBatteryLevelUpdateNotification:(CGFloat)batteryLevel isLow:(BOOL)isLow;
+- (void)postBatteryLevelUpdateNotification:(CGFloat)batteryLevel
+                                     isLow:(BOOL)isLow;
 
 @end

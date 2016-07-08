@@ -7,23 +7,23 @@
 //
 
 #import "Wiimote+PlugIn.h"
+#import "WiimoteDevice.h"
 #import "WiimoteInquiry.h"
 #import "WiimotePartSet.h"
-#import "WiimoteDevice.h"
 
 @implementation Wiimote (PlugIn)
 
-+ (void)registerSupportedModelName:(NSString*)name
++ (void)registerSupportedModelName:(NSString *)name
 {
     [WiimoteInquiry registerSupportedModelName:name];
 }
 
 - (void)deviceConfigurationChanged
 {
-	[m_Device requestReportType:[m_PartSet bestReportType]];
+    [m_Device requestReportType:[m_PartSet bestReportType]];
 }
 
-- (WiimotePart*)partWithClass:(Class)cls
+- (WiimotePart *)partWithClass:(Class)cls
 {
     return [m_PartSet partWithClass:cls];
 }

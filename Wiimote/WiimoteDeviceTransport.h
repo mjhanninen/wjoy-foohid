@@ -14,26 +14,26 @@
 
 @interface NSObject (WiimoteDeviceTransportDelegate)
 
-- (void)wiimoteDeviceTransport:(WiimoteDeviceTransport*)transport
-            reportDataReceived:(const uint8_t*)bytes
+- (void)wiimoteDeviceTransport:(WiimoteDeviceTransport *)transport
+            reportDataReceived:(const uint8_t *)bytes
                         length:(NSUInteger)length;
 
-- (void)wiimoteDeviceTransportDisconnected:(WiimoteDeviceTransport*)transport;
+- (void)wiimoteDeviceTransportDisconnected:(WiimoteDeviceTransport *)transport;
 
 @end
 
 @interface WiimoteDeviceTransport : NSObject
 {
-    @private
-        id m_Delegate;
+  @private
+    id m_Delegate;
 }
 
-+ (WiimoteDeviceTransport*)withHIDDevice:(HIDDevice*)device;
-+ (WiimoteDeviceTransport*)withBluetoothDevice:(IOBluetoothDevice*)device;
++ (WiimoteDeviceTransport *)withHIDDevice:(HIDDevice *)device;
++ (WiimoteDeviceTransport *)withBluetoothDevice:(IOBluetoothDevice *)device;
 
-- (NSString*)name;
-- (NSData*)address;
-- (NSString*)addressString;
+- (NSString *)name;
+- (NSData *)address;
+- (NSString *)addressString;
 
 - (id)lowLevelDevice;
 
@@ -41,7 +41,7 @@
 - (BOOL)open;
 - (void)close;
 
-- (BOOL)postBytes:(const uint8_t*)bytes length:(NSUInteger)length;
+- (BOOL)postBytes:(const uint8_t *)bytes length:(NSUInteger)length;
 
 - (id)delegate;
 - (void)setDelegate:(id)delegate;

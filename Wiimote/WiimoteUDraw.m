@@ -9,25 +9,21 @@
 
 @implementation WiimoteUDraw
 
-+ (void)load
++ (void)load { [WiimoteExtension registerExtensionClass:[WiimoteUDraw class]]; }
+
++ (NSData *)extensionSignature
 {
-    [WiimoteExtension registerExtensionClass:[WiimoteUDraw class]];
-}
+    static const uint8_t signature[] = {0xff, 0x00, 0xA4, 0x20, 0x01, 0x12};
 
-+ (NSData*)extensionSignature
-{
-	static const uint8_t  signature[]	= { 0xff, 0x00, 0xA4, 0x20, 0x01, 0x12 };
+    static NSData *result = nil;
 
-	static NSData *result = nil;
+    if (result == nil)
+    {
+        result =
+            [[NSData alloc] initWithBytes:signature length:sizeof(signature)];
+    }
 
-	if(result == nil)
-	{
-        result = [[NSData alloc]
-                        initWithBytes:signature
-                               length:sizeof(signature)];
-	}
-
-	return result;
+    return result;
 }
 
 + (WiimoteExtensionMeritClass)meritClass
@@ -35,99 +31,79 @@
     return WiimoteExtensionMeritClassSystem;
 }
 
-+ (NSUInteger)minReportDataSize
-{
-    return sizeof(WiimoteDeviceUDrawReport);
-}
++ (NSUInteger)minReportDataSize { return sizeof(WiimoteDeviceUDrawReport); }
 
-- (id)initWithOwner:(Wiimote*)owner
-    eventDispatcher:(WiimoteEventDispatcher*)dispatcher
+- (id)initWithOwner:(Wiimote *)owner
+    eventDispatcher:(WiimoteEventDispatcher *)dispatcher
 {
-    self = [super initWithOwner:owner
-                eventDispatcher:dispatcher];
+    self = [super initWithOwner:owner eventDispatcher:dispatcher];
 
-    if(self == nil)
+    if (self == nil)
         return nil;
 
-    m_IsPenPressed       = NO;
-    m_PenPosition        = NSZeroPoint;
-    m_PenPressure        = 0.0;
+    m_IsPenPressed = NO;
+    m_PenPosition = NSZeroPoint;
+    m_PenPressure = 0.0;
     m_IsPenButtonPressed = NO;
 
     return self;
 }
 
-- (NSString*)name
-{
-    return @"uDraw";
-}
+- (NSString *)name { return @"uDraw"; }
 
-- (BOOL)isPenPressed
-{
-    return m_IsPenPressed;
-}
+- (BOOL)isPenPressed { return m_IsPenPressed; }
 
 - (void)setPenPressed:(BOOL)pressed
 {
-    if(m_IsPenPressed != pressed)
+    if (m_IsPenPressed != pressed)
     {
         m_IsPenPressed = pressed;
 
-        if(m_IsPenPressed)
+        if (m_IsPenPressed)
             [[self eventDispatcher] postUDrawPenPressed:self];
         else
             [[self eventDispatcher] postUDrawPenReleased:self];
     }
 }
 
-- (NSPoint)penPosition
-{
-    return m_PenPosition;
-}
+- (NSPoint)penPosition { return m_PenPosition; }
 
-- (CGFloat)penPressure
-{
-    return m_PenPressure;
-}
+- (CGFloat)penPressure { return m_PenPressure; }
 
 - (void)setPenPosition:(NSPoint)position pressure:(CGFloat)pressure
 {
-    if(!WiimoteDeviceIsPointEqual(m_PenPosition, position) ||
-       !WiimoteDeviceIsFloatEqual(m_PenPressure, pressure))
+    if (!WiimoteDeviceIsPointEqual(m_PenPosition, position) ||
+        !WiimoteDeviceIsFloatEqual(m_PenPressure, pressure))
     {
         m_PenPosition = position;
         m_PenPressure = pressure;
 
-        [[self eventDispatcher]
-                            postUDraw:self
-                   penPositionChanged:m_PenPosition
-                             pressure:m_PenPressure];
+        [[self eventDispatcher] postUDraw:self
+                       penPositionChanged:m_PenPosition
+                                 pressure:m_PenPressure];
     }
 }
 
-- (BOOL)isPenButtonPressed
-{
-    return m_IsPenButtonPressed;
-}
+- (BOOL)isPenButtonPressed { return m_IsPenButtonPressed; }
 
 - (void)setPenButtonPressed:(BOOL)pressed
 {
-    if(m_IsPenButtonPressed != pressed)
+    if (m_IsPenButtonPressed != pressed)
     {
         m_IsPenButtonPressed = pressed;
-        if(m_IsPenButtonPressed)
+        if (m_IsPenButtonPressed)
             [[self eventDispatcher] postUDrawPenButtonPressed:self];
         else
             [[self eventDispatcher] postUDrawPenButtonReleased:self];
     }
 }
 
-- (void)handleReport:(const uint8_t*)extensionData length:(NSUInteger)length
+- (void)handleReport:(const uint8_t *)extensionData length:(NSUInteger)length
 {
-    if(length < sizeof(WiimoteDeviceUDrawReport))
+    if (length < sizeof(WiimoteDeviceUDrawReport))
         return;
 
-/*
+    /*
     0x00	Y offset from top-left corner of current grid of press point, or 0xFF if not pressed.
     0x01	X offset from top-left corner of current grid of press point, or 0xFF if not pressed.
     0x02	Upper nibble is minimum X grid that something is being pressed in (0-5), starting at lower left corner,
@@ -138,22 +114,25 @@
 */
 
     const WiimoteDeviceUDrawReport *report =
-        (const WiimoteDeviceUDrawReport*)extensionData;
+        (const WiimoteDeviceUDrawReport *)extensionData;
 
-    BOOL isPenPressed       = ((report->gridIndex   & 0x0F) != 0x0F);
+    BOOL isPenPressed = ((report->gridIndex & 0x0F) != 0x0F);
     BOOL isPenButtonPressed = ((report->buttonState & 0x02) == 0);
 
     [self setPenPressed:isPenPressed];
 
-    if(isPenPressed)
+    if (isPenPressed)
     {
-        CGFloat penPressure = (((CGFloat)report->pressure) - 8.0) / 236.0; // 0xF4 - 0x08 = 236 in dec
+        CGFloat penPressure = (((CGFloat)report->pressure) - 8.0) /
+                              236.0; // 0xF4 - 0x08 = 236 in dec
         NSPoint penPosition = NSMakePoint(
-                                    ((report->gridIndex >> 0) & 0x0F) * 256 + report->xOffset,
-                                    ((report->gridIndex >> 4) & 0x0F) * 256 + report->yOffset);
+            ((report->gridIndex >> 0) & 0x0F) * 256 + report->xOffset,
+            ((report->gridIndex >> 4) & 0x0F) * 256 + report->yOffset);
 
-        if(penPressure < 0.0) penPressure = 0.0;
-        if(penPressure > 1.0) penPressure = 1.0;
+        if (penPressure < 0.0)
+            penPressure = 0.0;
+        if (penPressure > 1.0)
+            penPressure = 1.0;
 
         [self setPenPosition:penPosition pressure:penPressure];
     }

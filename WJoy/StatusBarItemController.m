@@ -8,8 +8,8 @@
 
 #import <Wiimote/Wiimote.h>
 
-#import "StatusBarItemController.h"
 #import "LoginItemsList.h"
+#import "StatusBarItemController.h"
 
 @interface StatusBarItemController (PrivatePart)
 
@@ -21,10 +21,7 @@
 
 @implementation StatusBarItemController
 
-+ (void)start
-{
-    [[StatusBarItemController alloc] initInternal];
-}
++ (void)start { [[StatusBarItemController alloc] initInternal]; }
 
 @end
 
@@ -39,17 +36,17 @@
 - (id)initInternal
 {
     self = [super init];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
-    m_Menu              = [[NSMenu alloc] initWithTitle:@"WJoyStatusBarMenu"];
-    m_Item              = [[[NSStatusBar systemStatusBar]
-                                    statusItemWithLength:NSSquareStatusItemLength] retain];
+    m_Menu = [[NSMenu alloc] initWithTitle:@"WJoyStatusBarMenu"];
+    m_Item = [[[NSStatusBar systemStatusBar]
+        statusItemWithLength:NSSquareStatusItemLength] retain];
 
-    m_DiscoveryMenuItem = [[NSMenuItem alloc]
-                                    initWithTitle:@"Begin Dicovery"
-                                           action:@selector(beginDiscovery)
-                                    keyEquivalent:@""];
+    m_DiscoveryMenuItem =
+        [[NSMenuItem alloc] initWithTitle:@"Begin Dicovery"
+                                   action:@selector(beginDiscovery)
+                            keyEquivalent:@""];
 
     [m_DiscoveryMenuItem setTarget:[Wiimote class]];
     [m_DiscoveryMenuItem setEnabled:![Wiimote isDiscovering]];
@@ -58,7 +55,8 @@
     [m_Menu setDelegate:(id)self];
     [m_DiscoveryMenuItem release];
 
-    NSImage *icon = [[[NSApplication sharedApplication] applicationIconImage] copy];
+    NSImage *icon =
+        [[[NSApplication sharedApplication] applicationIconImage] copy];
 
     [icon setScalesWhenResized:YES];
     [icon setSize:NSMakeSize(20.0f, 20.0f)];
@@ -70,7 +68,8 @@
     [icon release];
 
     [Wiimote setUseOneButtonClickConnection:
-                [[NSUserDefaults standardUserDefaults] boolForKey:@"OneButtonClickConnection"]];
+                 [[NSUserDefaults standardUserDefaults]
+                     boolForKey:@"OneButtonClickConnection"]];
 
     return self;
 }
@@ -85,10 +84,11 @@
 
 - (void)toggleAutostart
 {
-    NSString    *appPath    = [[NSBundle mainBundle] bundlePath];
-    BOOL         isExists   = [[LoginItemsList userItemsList] isItemWithPathExists:appPath];
+    NSString *appPath = [[NSBundle mainBundle] bundlePath];
+    BOOL isExists =
+        [[LoginItemsList userItemsList] isItemWithPathExists:appPath];
 
-    if(isExists)
+    if (isExists)
         [[LoginItemsList userItemsList] removeItemWithPath:appPath];
     else
         [[LoginItemsList userItemsList] addItemWithPath:appPath];
@@ -96,28 +96,29 @@
 
 - (void)toggleOneButtonClickConnection
 {
-    [Wiimote setUseOneButtonClickConnection:
-                    ![Wiimote isUseOneButtonClickConnection]];
+    [Wiimote setUseOneButtonClickConnection:![Wiimote
+                                                isUseOneButtonClickConnection]];
 
     [[NSUserDefaults standardUserDefaults]
-                                        setBool:[Wiimote isUseOneButtonClickConnection]
-                                         forKey:@"OneButtonClickConnection"];
+        setBool:[Wiimote isUseOneButtonClickConnection]
+         forKey:@"OneButtonClickConnection"];
 }
 
-- (void)menuNeedsUpdate:(NSMenu*)menu
+- (void)menuNeedsUpdate:(NSMenu *)menu
 {
-    for(Wiimote *wiimote in [Wiimote connectedDevices]) {
+    for (Wiimote *wiimote in [Wiimote connectedDevices])
+    {
         [wiimote requestUpdateState];
     }
 
-    while([m_Menu numberOfItems] > 1)
+    while ([m_Menu numberOfItems] > 1)
         [m_Menu removeItemAtIndex:1];
 
-    if([Wiimote isBluetoothEnabled])
+    if ([Wiimote isBluetoothEnabled])
     {
         [m_DiscoveryMenuItem setImage:nil];
 
-        if([Wiimote isDiscovering])
+        if ([Wiimote isDiscovering])
         {
             [m_DiscoveryMenuItem setEnabled:NO];
             [m_DiscoveryMenuItem setTitle:@"Discovering..."];
@@ -137,30 +138,29 @@
         [m_DiscoveryMenuItem setTitle:@"Bluetooth is disabled!"];
     }
 
-    NSArray     *connectedDevices   = [Wiimote connectedDevices];
-    NSUInteger   countConnected     = [connectedDevices count];
+    NSArray *connectedDevices = [Wiimote connectedDevices];
+    NSUInteger countConnected = [connectedDevices count];
 
-    if(countConnected > 0)
+    if (countConnected > 0)
         [m_Menu addItem:[NSMenuItem separatorItem]];
 
-    for(NSUInteger i = 0; i < countConnected; i++)
+    for (NSUInteger i = 0; i < countConnected; i++)
     {
-        Wiimote         *device       = [connectedDevices objectAtIndex:i];
-        NSString        *batteryLevel = @"-";
+        Wiimote *device = [connectedDevices objectAtIndex:i];
+        NSString *batteryLevel = @"-";
 
-        if([device batteryLevel] >= 0.0)
-            batteryLevel = [NSString stringWithFormat:@"%.0lf%%", [device batteryLevel]];
+        if ([device batteryLevel] >= 0.0)
+            batteryLevel =
+                [NSString stringWithFormat:@"%.0lf%%", [device batteryLevel]];
 
-        NSMenuItem      *item         = [[NSMenuItem alloc]
-                                            initWithTitle:[NSString stringWithFormat:
-                                                                @"%li) Wiimote (%@) (%@)",
-                                                                    i,
-                                                                    batteryLevel,
-                                                                    [device addressString]]
-                                                   action:nil
-                                            keyEquivalent:@""];
+        NSMenuItem *item = [[NSMenuItem alloc]
+            initWithTitle:[NSString stringWithFormat:@"%li) Wiimote (%@) (%@)",
+                                                     i, batteryLevel,
+                                                     [device addressString]]
+                   action:nil
+            keyEquivalent:@""];
 
-        if([device isBatteryLevelLow])
+        if ([device isBatteryLevelLow])
         {
             NSImage *icon = [NSImage imageNamed:@"warning"];
             [icon setSize:NSMakeSize(16.0f, 16.0f)];
@@ -171,33 +171,44 @@
         [item release];
     }
 
-    NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:@"One-Button-Click-Connection" action:@selector(toggleOneButtonClickConnection) keyEquivalent:@""];
+    NSMenuItem *item = [[NSMenuItem alloc]
+        initWithTitle:@"One-Button-Click-Connection"
+               action:@selector(toggleOneButtonClickConnection)
+        keyEquivalent:@""];
     [item setTarget:self];
-    [item setState:([Wiimote isUseOneButtonClickConnection])?(NSOnState):(NSOffState)];
+    [item setState:([Wiimote isUseOneButtonClickConnection]) ? (NSOnState)
+                                                             : (NSOffState)];
     [m_Menu addItem:[NSMenuItem separatorItem]];
     [m_Menu addItem:item];
     [item release];
 
-    item = [[NSMenuItem alloc] initWithTitle:@"Autostart" action:@selector(toggleAutostart) keyEquivalent:@""];
+    item = [[NSMenuItem alloc] initWithTitle:@"Autostart"
+                                      action:@selector(toggleAutostart)
+                               keyEquivalent:@""];
     [item setTarget:self];
 
-    NSUInteger state = ([[LoginItemsList userItemsList]
-                            isItemWithPathExists:
-                                [[NSBundle mainBundle] bundlePath]])?
-                        (NSOnState):
-                        (NSOffState);
+    NSUInteger state =
+        ([[LoginItemsList userItemsList]
+            isItemWithPathExists:[[NSBundle mainBundle] bundlePath]])
+            ? (NSOnState)
+            : (NSOffState);
 
     [item setState:state];
     [m_Menu addItem:item];
     [item release];
 
-    item = [[NSMenuItem alloc] initWithTitle:@"About" action:@selector(orderFrontStandardAboutPanel:) keyEquivalent:@""];
+    item = [[NSMenuItem alloc]
+        initWithTitle:@"About"
+               action:@selector(orderFrontStandardAboutPanel:)
+        keyEquivalent:@""];
     [item setTarget:[NSApplication sharedApplication]];
     [m_Menu addItem:[NSMenuItem separatorItem]];
     [m_Menu addItem:item];
     [item release];
 
-    item = [[NSMenuItem alloc] initWithTitle:@"Quit" action:@selector(terminate:) keyEquivalent:@""];
+    item = [[NSMenuItem alloc] initWithTitle:@"Quit"
+                                      action:@selector(terminate:)
+                               keyEquivalent:@""];
     [item setTarget:[NSApplication sharedApplication]];
     [m_Menu addItem:[NSMenuItem separatorItem]];
     [m_Menu addItem:item];

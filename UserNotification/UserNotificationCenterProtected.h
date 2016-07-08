@@ -10,12 +10,12 @@
 
 @interface UserNotificationCenter (Protected)
 
-+ (void)registerImpl:(UserNotificationCenter*)impl;
++ (void)registerImpl:(UserNotificationCenter *)impl;
 
-+ (BOOL)shouldDeliverNotification:(UserNotification*)notification
-                           center:(UserNotificationCenter*)center;
++ (BOOL)shouldDeliverNotification:(UserNotification *)notification
+                           center:(UserNotificationCenter *)center;
 
-+ (void)notificationClicked:(UserNotification*)notification
-                     center:(UserNotificationCenter*)center;
++ (void)notificationClicked:(UserNotification *)notification
+                     center:(UserNotificationCenter *)center;
 
 @end

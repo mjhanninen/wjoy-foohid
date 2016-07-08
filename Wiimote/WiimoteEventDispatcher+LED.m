@@ -6,8 +6,8 @@
 //  Copyright 2012 alxn1. All rights reserved.
 //
 
-#import "WiimoteEventDispatcher+LED.h"
 #import "WiimoteDelegate.h"
+#import "WiimoteEventDispatcher+LED.h"
 
 @implementation WiimoteEventDispatcher (LED)
 
@@ -15,7 +15,7 @@
 {
     [[self delegate] wiimote:[self owner] highlightedLEDMaskChanged:mask];
 
-    if([self isStateNotificationsEnabled])
+    if ([self isStateNotificationsEnabled])
     {
         [self postNotification:WiimoteHighlightedLEDMaskChangedNotification
                          param:[NSNumber numberWithInteger:mask]

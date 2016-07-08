@@ -10,27 +10,29 @@
 
 @class UserNotificationCenter;
 
-typedef enum
-{
+typedef enum {
     UserNotificationCenterScreenCornerRightTop,
     UserNotificationCenterScreenCornerRightBottom,
     UserNotificationCenterScreenCornerLeftBottom,
     UserNotificationCenterScreenCornerLeftTop
 } UserNotificationCenterScreenCorner;
 
-APPKIT_EXTERN NSString *UserNotificationClickedNotification;    // object  => UserNotification
+APPKIT_EXTERN NSString
+    *UserNotificationClickedNotification; // object  => UserNotification
 
 // custom settings keys
-APPKIT_EXTERN NSString *UserNotificationCenterTimeoutKey;       // NSValue => NSTimeInterval
-APPKIT_EXTERN NSString *UserNotificationCenterScreenCornerKey;  // NSValue => UserNotificationCenterScreenCorner
+APPKIT_EXTERN NSString
+    *UserNotificationCenterTimeoutKey; // NSValue => NSTimeInterval
+APPKIT_EXTERN NSString *
+    UserNotificationCenterScreenCornerKey; // NSValue => UserNotificationCenterScreenCorner
 
 @protocol UserNotificationCenterDelegate
 
-- (BOOL)userNotificationCenter:(UserNotificationCenter*)center
-     shouldDeliverNotification:(UserNotification*)notification;
+- (BOOL)userNotificationCenter:(UserNotificationCenter *)center
+     shouldDeliverNotification:(UserNotification *)notification;
 
-- (void)userNotificationCenter:(UserNotificationCenter*)center
-           notificationClicked:(UserNotification*)notification;
+- (void)userNotificationCenter:(UserNotificationCenter *)center
+           notificationClicked:(UserNotification *)notification;
 
 @end
 
@@ -38,19 +40,19 @@ APPKIT_EXTERN NSString *UserNotificationCenterScreenCornerKey;  // NSValue => Us
 {
 }
 
-+ (NSArray*)all;
-+ (NSArray*)available;
-+ (UserNotificationCenter*)withName:(NSString*)name;
-+ (UserNotificationCenter*)availableWithName:(NSString*)name;
-+ (UserNotificationCenter*)best;
++ (NSArray *)all;
++ (NSArray *)available;
++ (UserNotificationCenter *)withName:(NSString *)name;
++ (UserNotificationCenter *)availableWithName:(NSString *)name;
++ (UserNotificationCenter *)best;
 
 + (BOOL)isSoundEnabled;
 + (void)setSoundEnabled:(BOOL)enabled;
 
-+ (NSString*)soundName;
-+ (void)setSoundName:(NSString*)name;
++ (NSString *)soundName;
++ (void)setSoundName:(NSString *)name;
 
-+ (void)deliver:(UserNotification*)notification;
++ (void)deliver:(UserNotification *)notification;
 
 + (id<UserNotificationCenterDelegate>)delegate;
 + (void)setDelegate:(id<UserNotificationCenterDelegate>)obj;
@@ -61,12 +63,12 @@ APPKIT_EXTERN NSString *UserNotificationCenterScreenCornerKey;  // NSValue => Us
 
 - (BOOL)isAvailable;
 
-- (NSString*)name;
+- (NSString *)name;
 - (NSUInteger)merit;
 
-- (void)deliver:(UserNotification*)notification;
+- (void)deliver:(UserNotification *)notification;
 
-- (NSDictionary*)customSettings;
-- (void)setCustomSettings:(NSDictionary*)preferences;
+- (NSDictionary *)customSettings;
+- (void)setCustomSettings:(NSDictionary *)preferences;
 
 @end

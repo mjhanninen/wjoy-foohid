@@ -10,24 +10,12 @@
 
 @implementation WiimoteIRPoint
 
-- (NSUInteger)index
-{
-    return m_Index;
-}
+- (NSUInteger)index { return m_Index; }
 
-- (BOOL)isOutOfView
-{
-    return m_IsOutOfView;
-}
+- (BOOL)isOutOfView { return m_IsOutOfView; }
 
-- (NSPoint)position
-{
-    return m_Position;
-}
+- (NSPoint)position { return m_Position; }
 
-- (Wiimote*)owner
-{
-    return m_Owner;
-}
+- (Wiimote *)owner { return m_Owner; }
 
 @end

@@ -14,19 +14,17 @@
 
 @interface WiimoteDeviceReadMemQueue : NSObject
 {
-	@private
-		WiimoteDevice					*m_Device;
-		NSMutableArray					*m_ReadMemHandlersQueue;
-        WiimoteDeviceReadMemHandler		*m_CurrentMemHandler;
+  @private
+    WiimoteDevice *m_Device;
+    NSMutableArray *m_ReadMemHandlersQueue;
+    WiimoteDeviceReadMemHandler *m_CurrentMemHandler;
 }
 
-- (id)initWithDevice:(WiimoteDevice*)device;
+- (id)initWithDevice:(WiimoteDevice *)device;
 
-- (BOOL)readMemory:(NSRange)memoryRange
-			target:(id)target
-			action:(SEL)action;
+- (BOOL)readMemory:(NSRange)memoryRange target:(id)target action:(SEL)action;
 
-- (void)handleReport:(WiimoteDeviceReport*)report;
+- (void)handleReport:(WiimoteDeviceReport *)report;
 
 - (void)handleDisconnect;
 

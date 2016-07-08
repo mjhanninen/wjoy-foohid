@@ -13,7 +13,7 @@
 - (id)init
 {
     self = [super init];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
     m_AuthRef = NULL;
@@ -27,40 +27,30 @@
     [super dealloc];
 }
 
-- (BOOL)isObtained
-{
-    return (m_AuthRef != NULL);
-}
+- (BOOL)isObtained { return (m_AuthRef != NULL); }
 
 - (BOOL)obtain
 {
-    if([self isObtained])
+    if ([self isObtained])
         return YES;
 
-	AuthorizationItem   right       = { "com.alxn1.wjoy.adminRights", 0, NULL, 0 };
-	AuthorizationRights rightSet    = { 1, &right };
+    AuthorizationItem right = {"com.alxn1.wjoy.adminRights", 0, NULL, 0};
+    AuthorizationRights rightSet = {1, &right};
 
-    if(AuthorizationCreate(
-                         NULL,
-                         kAuthorizationEmptyEnvironment,
-                         kAuthorizationFlagDefaults,
-                        &m_AuthRef) != noErr)
+    if (AuthorizationCreate(NULL, kAuthorizationEmptyEnvironment,
+                            kAuthorizationFlagDefaults, &m_AuthRef) != noErr)
     {
         m_AuthRef = NULL;
         return NO;
     }
 
-	AuthorizationFlags flags = kAuthorizationFlagDefaults |
-                               kAuthorizationFlagExtendRights |
-                               kAuthorizationFlagInteractionAllowed |
-                               kAuthorizationFlagPreAuthorize;
+    AuthorizationFlags flags =
+        kAuthorizationFlagDefaults | kAuthorizationFlagExtendRights |
+        kAuthorizationFlagInteractionAllowed | kAuthorizationFlagPreAuthorize;
 
-	if(AuthorizationCopyRights(
-                         m_AuthRef,
-                        &rightSet, 
-                         kAuthorizationEmptyEnvironment,
-                         flags,
-                         NULL) != noErr)
+    if (AuthorizationCopyRights(m_AuthRef, &rightSet,
+                                kAuthorizationEmptyEnvironment, flags,
+                                NULL) != noErr)
     {
         [self discard];
         return NO;
@@ -71,16 +61,13 @@
 
 - (void)discard
 {
-    if(![self isObtained])
+    if (![self isObtained])
         return;
 
     AuthorizationFree(m_AuthRef, kAuthorizationFlagDestroyRights);
     m_AuthRef = NULL;
 }
 
-- (AuthorizationRef)authRef
-{
-    return m_AuthRef;
-}
+- (AuthorizationRef)authRef { return m_AuthRef; }
 
 @end

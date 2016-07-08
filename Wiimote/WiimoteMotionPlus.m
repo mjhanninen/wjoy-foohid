@@ -7,9 +7,9 @@
 //
 
 #import "WiimoteMotionPlus.h"
-#import "WiimoteExtensionProbeHandler.h"
-#import "WiimoteEventDispatcher+MotionPlus.h"
 #import "Wiimote.h"
+#import "WiimoteEventDispatcher+MotionPlus.h"
+#import "WiimoteExtensionProbeHandler.h"
 
 @implementation WiimoteMotionPlus
 
@@ -18,61 +18,57 @@
     [WiimoteExtension registerExtensionClass:[WiimoteMotionPlus class]];
 }
 
-+ (NSUInteger)merit
++ (NSUInteger)merit { return WiimoteExtensionMeritClassMotionPlus; }
+
++ (NSUInteger)minReportDataSize { return 6; }
+
++ (NSArray *)motionPlusSignatures
 {
-    return WiimoteExtensionMeritClassMotionPlus;
-}
+    static const uint8_t signature1[] = {0x00, 0x00, 0xA4, 0x20, 0x04, 0x05};
+    static const uint8_t signature2[] = {0x00, 0x00, 0xA4, 0x20, 0x05, 0x05};
+    static const uint8_t signature3[] = {0x00, 0x00, 0xA4, 0x20, 0x07, 0x05};
+    static const uint8_t signature4[] = {0x01, 0x00, 0xA4, 0x20, 0x07, 0x05};
 
-+ (NSUInteger)minReportDataSize
-{
-    return 6;
-}
+    static NSArray *result = nil;
 
-+ (NSArray*)motionPlusSignatures
-{
-	static const uint8_t  signature1[]   = { 0x00, 0x00, 0xA4, 0x20, 0x04, 0x05 };
-	static const uint8_t  signature2[]   = { 0x00, 0x00, 0xA4, 0x20, 0x05, 0x05 };
-	static const uint8_t  signature3[]   = { 0x00, 0x00, 0xA4, 0x20, 0x07, 0x05 };
-    static const uint8_t  signature4[]   = { 0x01, 0x00, 0xA4, 0x20, 0x07, 0x05 };
-
-    static NSArray       *result         = nil;
-
-    if(result == nil)
-	{
-		result = [[NSArray alloc] initWithObjects:
-					[NSData dataWithBytes:signature1 length:sizeof(signature1)],
-					[NSData dataWithBytes:signature2 length:sizeof(signature2)],
-					[NSData dataWithBytes:signature3 length:sizeof(signature3)],
-                    [NSData dataWithBytes:signature4 length:sizeof(signature4)],
-					nil];
-	}
+    if (result == nil)
+    {
+        result = [[NSArray alloc]
+            initWithObjects:[NSData dataWithBytes:signature1
+                                           length:sizeof(signature1)],
+                            [NSData dataWithBytes:signature2
+                                           length:sizeof(signature2)],
+                            [NSData dataWithBytes:signature3
+                                           length:sizeof(signature3)],
+                            [NSData dataWithBytes:signature4
+                                           length:sizeof(signature4)],
+                            nil];
+    }
 
     return result;
 }
 
-+ (void)probe:(WiimoteIOManager*)ioManager
-       target:(id)target
-       action:(SEL)action
++ (void)probe:(WiimoteIOManager *)ioManager target:(id)target action:(SEL)action
 {
     [WiimoteExtensionProbeHandler
-                            routineProbe:ioManager
-							  signatures:[WiimoteMotionPlus motionPlusSignatures]
-                                  target:target
-                                  action:action];
+        routineProbe:ioManager
+          signatures:[WiimoteMotionPlus motionPlusSignatures]
+              target:target
+              action:action];
 }
 
-- (id)initWithOwner:(Wiimote*)owner
-    eventDispatcher:(WiimoteEventDispatcher*)dispatcher
+- (id)initWithOwner:(Wiimote *)owner
+    eventDispatcher:(WiimoteEventDispatcher *)dispatcher
 {
     self = [super initWithOwner:owner eventDispatcher:dispatcher];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
-    m_SubExtension					= nil;
-    m_IOManager						= nil;
-	m_ReportCounter					= 0;
-	m_ExtensionReportCounter		= 0;
-	m_IsSubExtensionDisconnected	= NO;
+    m_SubExtension = nil;
+    m_IOManager = nil;
+    m_ReportCounter = 0;
+    m_ExtensionReportCounter = 0;
+    m_IsSubExtensionDisconnected = NO;
 
     return self;
 }
@@ -84,132 +80,117 @@
     [super dealloc];
 }
 
-- (void)calibrate:(WiimoteIOManager*)ioManager
+- (void)calibrate:(WiimoteIOManager *)ioManager
 {
     m_IOManager = [ioManager retain];
 }
 
-- (void)handleReport:(const uint8_t*)extensionData length:(NSUInteger)length
+- (void)handleReport:(const uint8_t *)extensionData length:(NSUInteger)length
 {
-    if(length < 6)
+    if (length < 6)
         return;
 
-	BOOL isExtensionConnected	= ((extensionData[5] & 0x1) == 1);
-	BOOL isExtensionDataReport  = ((extensionData[5] & 0x2) == 0);
+    BOOL isExtensionConnected = ((extensionData[5] & 0x1) == 1);
+    BOOL isExtensionDataReport = ((extensionData[5] & 0x2) == 0);
 
-	if(m_SubExtension == nil && isExtensionConnected)
-	{
-		[self deactivate];
-		return;
-	}
-
-	m_ReportCounter++;
-	if(isExtensionDataReport)
-		m_ExtensionReportCounter++;
-
-	if(m_ReportCounter == 10)
-	{
-		BOOL needDeactivate = NO;
-
-		if((m_SubExtension == nil && m_ExtensionReportCounter != 0) ||
-		   (m_SubExtension != nil && m_ExtensionReportCounter == 0))
-		{
-			needDeactivate = YES;
-		}
-
-		m_ReportCounter			 = 0;
-		m_ExtensionReportCounter = 0;
-
-		if(needDeactivate)
-		{
-			[self deactivate];
-			return;
-		}
-	}
-
-    if(isExtensionDataReport)
+    if (m_SubExtension == nil && isExtensionConnected)
     {
-		if(!m_IsSubExtensionDisconnected)
-			[m_SubExtension handleMotionPlusReport:extensionData length:length];
+        [self deactivate];
+        return;
+    }
+
+    m_ReportCounter++;
+    if (isExtensionDataReport)
+        m_ExtensionReportCounter++;
+
+    if (m_ReportCounter == 10)
+    {
+        BOOL needDeactivate = NO;
+
+        if ((m_SubExtension == nil && m_ExtensionReportCounter != 0) ||
+            (m_SubExtension != nil && m_ExtensionReportCounter == 0))
+        {
+            needDeactivate = YES;
+        }
+
+        m_ReportCounter = 0;
+        m_ExtensionReportCounter = 0;
+
+        if (needDeactivate)
+        {
+            [self deactivate];
+            return;
+        }
+    }
+
+    if (isExtensionDataReport)
+    {
+        if (!m_IsSubExtensionDisconnected)
+            [m_SubExtension handleMotionPlusReport:extensionData length:length];
 
         return;
     }
 
-    m_Report.yaw.speed			= extensionData[0];
-	m_Report.roll.speed			= extensionData[1];
-	m_Report.pitch.speed        = extensionData[2];
+    m_Report.yaw.speed = extensionData[0];
+    m_Report.roll.speed = extensionData[1];
+    m_Report.pitch.speed = extensionData[2];
 
-	m_Report.yaw.speed		   |= ((uint16_t)(extensionData[3] >> 2)) << 8;
-	m_Report.roll.speed		   |= ((uint16_t)(extensionData[4] >> 2)) << 8;
-	m_Report.pitch.speed       |= ((uint16_t)(extensionData[5] >> 2)) << 8;
+    m_Report.yaw.speed |= ((uint16_t)(extensionData[3] >> 2)) << 8;
+    m_Report.roll.speed |= ((uint16_t)(extensionData[4] >> 2)) << 8;
+    m_Report.pitch.speed |= ((uint16_t)(extensionData[5] >> 2)) << 8;
 
-	m_Report.yaw.isSlowMode		= ((extensionData[3] & 2) != 0);
-	m_Report.roll.isSlowMode    = ((extensionData[4] & 2) != 0);
-	m_Report.pitch.isSlowMode   = ((extensionData[3] & 1) != 0);
+    m_Report.yaw.isSlowMode = ((extensionData[3] & 2) != 0);
+    m_Report.roll.isSlowMode = ((extensionData[4] & 2) != 0);
+    m_Report.pitch.isSlowMode = ((extensionData[3] & 1) != 0);
 
-	[[self eventDispatcher]
-					postMotionPlus:self
-							report:&m_Report];
+    [[self eventDispatcher] postMotionPlus:self report:&m_Report];
 }
 
-- (void)setSubExtension:(WiimoteExtension*)extension
+- (void)setSubExtension:(WiimoteExtension *)extension
 {
-    if(extension != nil &&
-     ![extension isSupportMotionPlus])
+    if (extension != nil && ![extension isSupportMotionPlus])
     {
         m_IsSubExtensionDisconnected = YES;
     }
 
-    if(m_SubExtension == extension)
+    if (m_SubExtension == extension)
         return;
 
     [m_SubExtension release];
     m_SubExtension = [extension retain];
 
-	if(extension != nil && !m_IsSubExtensionDisconnected)
-	{
-		[[self eventDispatcher]
-						postMotionPlus:self
-					extensionConnected:extension];
-	}
+    if (extension != nil && !m_IsSubExtensionDisconnected)
+    {
+        [[self eventDispatcher] postMotionPlus:self
+                            extensionConnected:extension];
+    }
 }
 
-- (NSString*)name
-{
-    return @"Motion Plus";
-}
+- (NSString *)name { return @"Motion Plus"; }
 
-- (void)disconnected
-{
-	[self disconnectSubExtension];
-}
+- (void)disconnected { [self disconnectSubExtension]; }
 
-- (const WiimoteMotionPlusReport*)lastReport
-{
-    return (&m_Report);
-}
+- (const WiimoteMotionPlusReport *)lastReport { return (&m_Report); }
 
-- (WiimoteExtension*)subExtension
+- (WiimoteExtension *)subExtension
 {
-	if(m_IsSubExtensionDisconnected)
-		return nil;
+    if (m_IsSubExtensionDisconnected)
+        return nil;
 
     return [[m_SubExtension retain] autorelease];
 }
 
 - (void)disconnectSubExtension
 {
-	if(m_IsSubExtensionDisconnected ||
-	   m_SubExtension == nil)
-	{
-		return;
-	}
+    if (m_IsSubExtensionDisconnected || m_SubExtension == nil)
+    {
+        return;
+    }
 
-	m_IsSubExtensionDisconnected = YES;
+    m_IsSubExtensionDisconnected = YES;
 
-	[[self eventDispatcher]
-					postMotionPlus:self
-			 extensionDisconnected:m_SubExtension];
+    [[self eventDispatcher] postMotionPlus:self
+                     extensionDisconnected:m_SubExtension];
 }
 
 - (void)deactivate
@@ -222,7 +203,7 @@
 
     usleep(50000);
 
-	[[self owner] reconnectExtension];
+    [[self owner] reconnectExtension];
 }
 
 @end

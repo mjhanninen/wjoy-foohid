@@ -7,23 +7,27 @@
 //
 
 #import "NotificationSystem.h"
-#import "NotificationWindow.h"
 #import "NotificationLayoutManager.h"
+#import "NotificationWindow.h"
 
 @interface NotificationSystem (PrivatePart)
 
-- (BOOL)hasSpaceForNotification:(UserNotification*)notification rect:(NSRect*)resultRect index:(NSUInteger*)index;
-- (void)showNotification:(UserNotification*)notification rect:(NSRect)rect index:(NSUInteger)index;
+- (BOOL)hasSpaceForNotification:(UserNotification *)notification
+                           rect:(NSRect *)resultRect
+                          index:(NSUInteger *)index;
+- (void)showNotification:(UserNotification *)notification
+                    rect:(NSRect)rect
+                   index:(NSUInteger)index;
 
 @end
 
 @implementation NotificationSystem
 
-+ (NotificationSystem*)sharedInstance
++ (NotificationSystem *)sharedInstance
 {
     static NotificationSystem *result = nil;
 
-    if(result == nil)
+    if (result == nil)
         result = [[NotificationSystem alloc] init];
 
     return result;
@@ -32,16 +36,16 @@
 - (id)init
 {
     self = [super init];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
-    m_LayoutManager     = [[NotificationLayoutManager managerWithScreenCorner:
-                                        UserNotificationCenterScreenCornerRightTop]
-                                retain];
+    m_LayoutManager = [[NotificationLayoutManager
+        managerWithScreenCorner:UserNotificationCenterScreenCornerRightTop]
+        retain];
 
-    m_NotificationQueue     = [[NSMutableArray alloc] init];
-    m_ActiveNotifications   = [[NSMutableArray alloc] init];
-    m_NotificationTimeout   = 5.0;
+    m_NotificationQueue = [[NSMutableArray alloc] init];
+    m_ActiveNotifications = [[NSMutableArray alloc] init];
+    m_NotificationTimeout = 5.0;
 
     [[NSNotificationCenter defaultCenter]
         addObserver:self
@@ -62,10 +66,7 @@
     [super dealloc];
 }
 
-- (NSTimeInterval)notificationTimeout
-{
-    return m_NotificationTimeout;
-}
+- (NSTimeInterval)notificationTimeout { return m_NotificationTimeout; }
 
 - (void)setNotificationTimeout:(NSTimeInterval)timeout
 {
@@ -79,14 +80,15 @@
 
 - (void)setScreenCorner:(UserNotificationCenterScreenCorner)corner
 {
-    if([self screenCorner] == corner)
+    if ([self screenCorner] == corner)
         return;
 
     [m_LayoutManager release];
-    m_LayoutManager = [[NotificationLayoutManager managerWithScreenCorner:corner] retain];
+    m_LayoutManager =
+        [[NotificationLayoutManager managerWithScreenCorner:corner] retain];
 
     NSUInteger countOpenedWindows = [m_ActiveNotifications count];
-    for(NSUInteger i = 0; i < countOpenedWindows; i++)
+    for (NSUInteger i = 0; i < countOpenedWindows; i++)
     {
         NotificationWindow *w = [m_ActiveNotifications objectAtIndex:i];
         [w setReleasedWhenClosed:YES];
@@ -98,42 +100,36 @@
     [m_ActiveNotifications removeAllObjects];
 }
 
-- (void)deliver:(UserNotification*)notification
+- (void)deliver:(UserNotification *)notification
 {
-    NSRect      rect;
-    NSUInteger  index;
+    NSRect rect;
+    NSUInteger index;
 
-    if([self hasSpaceForNotification:notification rect:&rect index:&index])
+    if ([self hasSpaceForNotification:notification rect:&rect index:&index])
         [self showNotification:notification rect:rect index:index];
     else
         [m_NotificationQueue addObject:notification];
 }
 
-- (id<NotificationSystemDelegate>)delegate
-{
-    return m_Delegate;
-}
+- (id<NotificationSystemDelegate>)delegate { return m_Delegate; }
 
-- (void)setDelegate:(id<NotificationSystemDelegate>)obj
-{
-    m_Delegate = obj;
-}
+- (void)setDelegate:(id<NotificationSystemDelegate>)obj { m_Delegate = obj; }
 
 - (void)notificationClicked:(id)sender
 {
     [m_Delegate notificationSystem:self
-               notificationClicked:[(NotificationWindow*)sender notification]];
+               notificationClicked:[(NotificationWindow *)sender notification]];
 }
 
 - (void)showNextNotificationFromQueue
 {
-    if([m_NotificationQueue count] != 0)
+    if ([m_NotificationQueue count] != 0)
     {
-        NSRect               rect;
-        NSUInteger           index;
-        UserNotification    *n = [m_NotificationQueue objectAtIndex:0];
+        NSRect rect;
+        NSUInteger index;
+        UserNotification *n = [m_NotificationQueue objectAtIndex:0];
 
-        if([self hasSpaceForNotification:n rect:&rect index:&index])
+        if ([self hasSpaceForNotification:n rect:&rect index:&index])
         {
             [self showNotification:n rect:rect index:index];
             [m_NotificationQueue removeObjectAtIndex:0];
@@ -141,16 +137,17 @@
     }
 }
 
-- (void)windowWillClose:(NSNotification*)notification
+- (void)windowWillClose:(NSNotification *)notification
 {
     [m_ActiveNotifications removeObject:[notification object]];
     [self showNextNotificationFromQueue];
 }
 
-- (void)applicationDidChangeScreenParametersNotification:(NSNotification*)notification
+- (void)applicationDidChangeScreenParametersNotification:
+    (NSNotification *)notification
 {
     NSUInteger countOpenedWindows = [m_ActiveNotifications count];
-    for(NSUInteger i = 0; i < countOpenedWindows; i++)
+    for (NSUInteger i = 0; i < countOpenedWindows; i++)
     {
         NotificationWindow *w = [m_ActiveNotifications objectAtIndex:i];
         [w setAnimationEnabled:NO];
@@ -166,7 +163,9 @@
 
 @implementation NotificationSystem (PrivatePart)
 
-- (BOOL)hasSpaceForNotification:(UserNotification*)notification rect:(NSRect*)resultRect index:(NSUInteger*)index
+- (BOOL)hasSpaceForNotification:(UserNotification *)notification
+                           rect:(NSRect *)resultRect
+                          index:(NSUInteger *)index
 {
     return [m_LayoutManager hasSpaceForNotification:notification
                                 activeNotifications:m_ActiveNotifications
@@ -174,9 +173,12 @@
                                               index:index];
 }
 
-- (void)showNotification:(UserNotification*)notification rect:(NSRect)rect index:(NSUInteger)index
+- (void)showNotification:(UserNotification *)notification
+                    rect:(NSRect)rect
+                   index:(NSUInteger)index
 {
-    NotificationWindow *window = [NotificationWindow newWindowWithNotification:notification frame:rect];
+    NotificationWindow *window =
+        [NotificationWindow newWindowWithNotification:notification frame:rect];
 
     [window setTarget:self];
     [window setAction:@selector(notificationClicked:)];

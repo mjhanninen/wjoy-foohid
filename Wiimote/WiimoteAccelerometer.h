@@ -10,28 +10,28 @@
 
 @interface WiimoteAccelerometer : NSObject
 {
-    @private
-        BOOL        m_IsEnabled;
+  @private
+    BOOL m_IsEnabled;
 
-        CGFloat     m_GravityX;
-        CGFloat     m_GravityY;
-        CGFloat     m_GravityZ;
+    CGFloat m_GravityX;
+    CGFloat m_GravityY;
+    CGFloat m_GravityZ;
 
-        CGFloat     m_Pitch;
-        CGFloat     m_Roll;
+    CGFloat m_Pitch;
+    CGFloat m_Roll;
 
-        CGFloat     m_GravitySmoothQuant;
-        CGFloat     m_AnglesSmoothQuant;
+    CGFloat m_GravitySmoothQuant;
+    CGFloat m_AnglesSmoothQuant;
 
-        uint16_t    m_ZeroX;
-        uint16_t    m_ZeroY;
-        uint16_t    m_ZeroZ;
+    uint16_t m_ZeroX;
+    uint16_t m_ZeroY;
+    uint16_t m_ZeroZ;
 
-        uint16_t    m_1gX;
-        uint16_t    m_1gY;
-        uint16_t    m_1gZ;
+    uint16_t m_1gX;
+    uint16_t m_1gY;
+    uint16_t m_1gZ;
 
-        id          m_Delegate;
+    id m_Delegate;
 }
 
 - (BOOL)isEnabled;

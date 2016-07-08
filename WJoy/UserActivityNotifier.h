@@ -10,11 +10,11 @@
 
 @interface UserActivityNotifier : NSObject
 {
-    @private
-        NSDate *m_LastNotifyTime;
+  @private
+    NSDate *m_LastNotifyTime;
 }
 
-+ (UserActivityNotifier*)sharedNotifier;
++ (UserActivityNotifier *)sharedNotifier;
 
 - (void)notify;
 

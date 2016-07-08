@@ -12,29 +12,31 @@
 
 - (id)initWithDomain:(LoginItemsListDomain)domain;
 
-- (NSString*)itemPath:(LSSharedFileListItemRef)item;
-- (LSSharedFileListItemRef)findItemWithPath:(NSString*)path;
+- (NSString *)itemPath:(LSSharedFileListItemRef)item;
+- (LSSharedFileListItemRef)findItemWithPath:(NSString *)path;
 
 @end
 
 @implementation LoginItemsList
 
-+ (LoginItemsList*)userItemsList
++ (LoginItemsList *)userItemsList
 {
     static LoginItemsList *result = nil;
 
-    if(result == nil)
-        result = [[LoginItemsList alloc] initWithDomain:LoginItemsListDomainUser];
+    if (result == nil)
+        result =
+            [[LoginItemsList alloc] initWithDomain:LoginItemsListDomainUser];
 
     return result;
 }
 
-+ (LoginItemsList*)systemItemsList
++ (LoginItemsList *)systemItemsList
 {
     static LoginItemsList *result = nil;
 
-    if(result == nil)
-        result = [[LoginItemsList alloc] initWithDomain:LoginItemsListDomainSystem];
+    if (result == nil)
+        result =
+            [[LoginItemsList alloc] initWithDomain:LoginItemsListDomainSystem];
 
     return result;
 }
@@ -47,90 +49,78 @@
 
 - (void)dealloc
 {
-    if(m_List != NULL)
+    if (m_List != NULL)
         CFRelease(m_List);
 
     [super dealloc];
 }
 
-- (LoginItemsListDomain)domain
-{
-    return m_Domain;
-}
+- (LoginItemsListDomain)domain { return m_Domain; }
 
-- (NSArray*)allPaths
+- (NSArray *)allPaths
 {
-    UInt32           seed   = 0;
-    NSArray         *items  = [(NSArray*)LSSharedFileListCopySnapshot(m_List, &seed) autorelease];
-    NSMutableArray  *result = [NSMutableArray arrayWithCapacity:[items count]];
+    UInt32 seed = 0;
+    NSArray *items =
+        [(NSArray *)LSSharedFileListCopySnapshot(m_List, &seed) autorelease];
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:[items count]];
 
     unsigned countItems = [items count];
-    for(unsigned i = 0; i < countItems; i++)
+    for (unsigned i = 0; i < countItems; i++)
     {
-        LSSharedFileListItemRef item = (LSSharedFileListItemRef)[items objectAtIndex:i];
+        LSSharedFileListItemRef item =
+            (LSSharedFileListItemRef)[items objectAtIndex:i];
         [result addObject:[self itemPath:item]];
     }
 
     return result;
 }
 
-- (BOOL)isItemWithPathExists:(NSString*)path
+- (BOOL)isItemWithPathExists:(NSString *)path
 {
     return ([self findItemWithPath:path] != NULL);
 }
 
-- (BOOL)addItemWithPath:(NSString*)path
+- (BOOL)addItemWithPath:(NSString *)path
 {
-    if([self isItemWithPathExists:path])
+    if ([self isItemWithPathExists:path])
         return YES;
 
-    NSURL       *url            = [NSURL fileURLWithPath:path];
-    NSString    *displayName    = [[NSFileManager defaultManager] displayNameAtPath:path];
-    IconRef      icon           = NULL;
-    FSRef        ref;
+    NSURL *url = [NSURL fileURLWithPath:path];
+    NSString *displayName =
+        [[NSFileManager defaultManager] displayNameAtPath:path];
+    IconRef icon = NULL;
+    FSRef ref;
 
-    if(CFURLGetFSRef((CFURLRef)url, &ref))
+    if (CFURLGetFSRef((CFURLRef)url, &ref))
     {
-        if(GetIconRefFromFileInfo(
-                                &ref,
-                                 0,
-                                 NULL,
-                                 kFSCatInfoNone,
-                                 NULL,
-                                 kIconServicesNormalUsageFlag,
-                                &icon,
-                                 NULL) != noErr)
+        if (GetIconRefFromFileInfo(&ref, 0, NULL, kFSCatInfoNone, NULL,
+                                   kIconServicesNormalUsageFlag, &icon,
+                                   NULL) != noErr)
         {
             icon = NULL;
         }
     }
 
-    LSSharedFileListItemRef item =
-                LSSharedFileListInsertItemURL(
-                                            m_List,
-                                            kLSSharedFileListItemLast,
-                                            (CFStringRef)displayName,
-                                            icon,
-                                            (CFURLRef)url,
-                                            NULL,
-                                            NULL);
+    LSSharedFileListItemRef item = LSSharedFileListInsertItemURL(
+        m_List, kLSSharedFileListItemLast, (CFStringRef)displayName, icon,
+        (CFURLRef)url, NULL, NULL);
 
-    if(icon != NULL)
+    if (icon != NULL)
         ReleaseIconRef(icon);
 
-    if(item == NULL)
+    if (item == NULL)
         return NO;
 
     CFRelease(item);
     return YES;
 }
 
-- (BOOL)removeItemWithPath:(NSString*)path
+- (BOOL)removeItemWithPath:(NSString *)path
 {
-    
+
     LSSharedFileListItemRef item = [self findItemWithPath:path];
 
-    if(item == NULL)
+    if (item == NULL)
         return YES;
 
     return (LSSharedFileListItemRemove(m_List, item) == noErr);
@@ -143,18 +133,17 @@
 - (id)initWithDomain:(LoginItemsListDomain)domain
 {
     self = [super init];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
     m_Domain = domain;
-    m_List   = LSSharedFileListCreate(
-                            kCFAllocatorDefault,
-                            (domain == LoginItemsListDomainUser)?
-                                            (kLSSharedFileListSessionLoginItems):
-                                            (kLSSharedFileListGlobalLoginItems),
-                            NULL);
+    m_List = LSSharedFileListCreate(kCFAllocatorDefault,
+                                    (domain == LoginItemsListDomainUser)
+                                        ? (kLSSharedFileListSessionLoginItems)
+                                        : (kLSSharedFileListGlobalLoginItems),
+                                    NULL);
 
-    if(m_List == NULL)
+    if (m_List == NULL)
     {
         [self release];
         return nil;
@@ -163,41 +152,41 @@
     return self;
 }
 
-- (NSString*)itemPath:(LSSharedFileListItemRef)item
+- (NSString *)itemPath:(LSSharedFileListItemRef)item
 {
     CFURLRef url = NULL;
-    if(LSSharedFileListItemResolve(
-                                 item,
-                                 kLSSharedFileListNoUserInteraction |
-                                    kLSSharedFileListDoNotMountVolumes,
-                                &url,
-                                 NULL) != noErr)
+    if (LSSharedFileListItemResolve(item,
+                                    kLSSharedFileListNoUserInteraction |
+                                        kLSSharedFileListDoNotMountVolumes,
+                                    &url, NULL) != noErr)
     {
         return nil;
     }
 
-    if(url == NULL)
+    if (url == NULL)
         return nil;
 
-    NSString *result = [[[(NSURL*)url path] retain] autorelease];
+    NSString *result = [[[(NSURL *)url path] retain] autorelease];
     CFRelease(url);
 
     return result;
 }
 
-- (LSSharedFileListItemRef)findItemWithPath:(NSString*)path
+- (LSSharedFileListItemRef)findItemWithPath:(NSString *)path
 {
-    if(path == nil)
+    if (path == nil)
         return NULL;
 
-    UInt32       seed   = 0;
-    NSArray     *items  = [(NSArray*)LSSharedFileListCopySnapshot(m_List, &seed) autorelease];
+    UInt32 seed = 0;
+    NSArray *items =
+        [(NSArray *)LSSharedFileListCopySnapshot(m_List, &seed) autorelease];
 
     unsigned countItems = [items count];
-    for(unsigned i = 0; i < countItems; i++)
+    for (unsigned i = 0; i < countItems; i++)
     {
-        LSSharedFileListItemRef item = (LSSharedFileListItemRef)[items objectAtIndex:i];
-        if([[self itemPath:item] isEqualToString:path])
+        LSSharedFileListItemRef item =
+            (LSSharedFileListItemRef)[items objectAtIndex:i];
+        if ([[self itemPath:item] isEqualToString:path])
             return item;
     }
 

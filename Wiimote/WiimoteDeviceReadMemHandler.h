@@ -12,21 +12,21 @@
 
 @interface WiimoteDeviceReadMemHandler : NSObject
 {
-	@private
-		NSRange			 m_MemoryRange;
-		NSMutableData	*m_ReadedData;
-		id				 m_Target;
-		SEL				 m_Action;
+  @private
+    NSRange m_MemoryRange;
+    NSMutableData *m_ReadedData;
+    id m_Target;
+    SEL m_Action;
 }
 
 - (id)initWithMemoryRange:(NSRange)memoryRange
-				   target:(id)target
-				   action:(SEL)action;
+                   target:(id)target
+                   action:(SEL)action;
 
 - (NSRange)memoryRange;
 
 - (BOOL)isAllDataReaded;
-- (void)handleData:(const uint8_t*)data length:(NSUInteger)length;
+- (void)handleData:(const uint8_t *)data length:(NSUInteger)length;
 
 - (void)errorOccured;
 - (void)disconnected;

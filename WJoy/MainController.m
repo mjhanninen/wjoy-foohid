@@ -7,9 +7,9 @@
 //
 
 #import "MainController.h"
-#import "WiimoteAutoWrapper.h"
-#import "StatusBarItemController.h"
 #import "NotificationCenter.h"
+#import "StatusBarItemController.h"
+#import "WiimoteAutoWrapper.h"
 #import "WiimoteLEDsController.h"
 
 @implementation MainController

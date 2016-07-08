@@ -16,30 +16,27 @@
 }
 
 - (BOOL)hasSpaceBeforeFirst:(NSRect)bestRect
-        activeNotifications:(NSArray*)activeNotifications
-                       rect:(NSRect*)resultRect
+        activeNotifications:(NSArray *)activeNotifications
+                       rect:(NSRect *)resultRect
 {
-    NSRect      screenRect  = [self screenRect];
-    NSUInteger  countActive = [activeNotifications count];
-    NSRect      result      = NSMakeRect(
-                                    screenRect.origin.x,
-                                    screenRect.origin.y,
-                                    bestRect.size.width,
-                                    bestRect.size.height);
+    NSRect screenRect = [self screenRect];
+    NSUInteger countActive = [activeNotifications count];
+    NSRect result = NSMakeRect(screenRect.origin.x, screenRect.origin.y,
+                               bestRect.size.width, bestRect.size.height);
 
-    if(countActive == 0)
+    if (countActive == 0)
     {
-        if(resultRect != NULL)
+        if (resultRect != NULL)
             *resultRect = result;
 
         return YES;
     }
 
     NSRect firstFrame = [[activeNotifications objectAtIndex:0] frame];
-    if((result.origin.x < firstFrame.origin.x) ||
-       ((result.origin.y + result.size.height + 10.0) <= firstFrame.origin.y))
+    if ((result.origin.x < firstFrame.origin.x) ||
+        ((result.origin.y + result.size.height + 10.0) <= firstFrame.origin.y))
     {
-        if(resultRect != NULL)
+        if (resultRect != NULL)
             *resultRect = result;
 
         return YES;
@@ -51,69 +48,66 @@
 - (BOOL)hasSpaceBetween:(NSRect)bestRect
               firstRect:(NSRect)firstRect
              secondRect:(NSRect)secondRect
-    activeNotifications:(NSArray*)activeNotifications
-                   rect:(NSRect*)resultRect
+    activeNotifications:(NSArray *)activeNotifications
+                   rect:(NSRect *)resultRect
 {
-    if(firstRect.origin.x < secondRect.origin.x)
+    if (firstRect.origin.x < secondRect.origin.x)
     {
         NSRect screenRect = [self screenRect];
-        float  lostSpace  = screenRect.origin.y + screenRect.size.height -
-                            firstRect.origin.y - firstRect.size.height - 10.0f;
+        float lostSpace = screenRect.origin.y + screenRect.size.height -
+                          firstRect.origin.y - firstRect.size.height - 10.0f;
 
-        if(lostSpace >= bestRect.size.height)
+        if (lostSpace >= bestRect.size.height)
         {
-            if(resultRect != NULL)
+            if (resultRect != NULL)
             {
                 *resultRect = NSMakeRect(
-                                    firstRect.origin.x,
-                                    firstRect.origin.y + bestRect.size.height + 10.0f,
-                                    bestRect.size.width,
-                                    bestRect.size.height);
+                    firstRect.origin.x,
+                    firstRect.origin.y + bestRect.size.height + 10.0f,
+                    bestRect.size.width, bestRect.size.height);
             }
 
             return YES;
         }
 
         lostSpace = secondRect.origin.y - screenRect.origin.y - 10.0f;
-        if(lostSpace >= bestRect.size.height)
+        if (lostSpace >= bestRect.size.height)
         {
-            if(resultRect != NULL)
+            if (resultRect != NULL)
             {
-                *resultRect = NSMakeRect(
-                                    secondRect.origin.x,
-                                    screenRect.origin.y,
-                                    bestRect.size.width,
-                                    bestRect.size.height);
+                *resultRect =
+                    NSMakeRect(secondRect.origin.x, screenRect.origin.y,
+                               bestRect.size.width, bestRect.size.height);
             }
 
             return YES;
         }
 
-        if((secondRect.origin.x - firstRect.origin.x) >= (bestRect.size.width + 20.0f))
+        if ((secondRect.origin.x - firstRect.origin.x) >=
+            (bestRect.size.width + 20.0f))
         {
-            if(resultRect != NULL)
+            if (resultRect != NULL)
             {
-                *resultRect = NSMakeRect(
-                                    firstRect.origin.x + bestRect.size.width + 10.0f,
-                                    screenRect.origin.y,
-                                    bestRect.size.width,
-                                    bestRect.size.height);
+                *resultRect =
+                    NSMakeRect(firstRect.origin.x + bestRect.size.width + 10.0f,
+                               screenRect.origin.y, bestRect.size.width,
+                               bestRect.size.height);
             }
 
             return YES;
         }
     }
 
-    float lostSpace = secondRect.origin.y - firstRect.origin.y - firstRect.size.height - 20.0f;
-    if(lostSpace >= bestRect.size.height)
+    float lostSpace = secondRect.origin.y - firstRect.origin.y -
+                      firstRect.size.height - 20.0f;
+    if (lostSpace >= bestRect.size.height)
     {
-        if(resultRect != NULL)
+        if (resultRect != NULL)
         {
-            *resultRect = NSMakeRect(
-                                firstRect.origin.x,
-                                firstRect.origin.y + firstRect.size.height + 10.0f,
-                                bestRect.size.width,
-                                bestRect.size.height);
+            *resultRect =
+                NSMakeRect(firstRect.origin.x,
+                           firstRect.origin.y + firstRect.size.height + 10.0f,
+                           bestRect.size.width, bestRect.size.height);
         }
 
         return YES;
@@ -123,41 +117,38 @@
 }
 
 - (BOOL)hasSpaceAfterLast:(NSRect)bestRect
-      activeNotifications:(NSArray*)activeNotifications
-                     rect:(NSRect*)resultRect
+      activeNotifications:(NSArray *)activeNotifications
+                     rect:(NSRect *)resultRect
 {
-    NSRect screenRect   = [self screenRect];
-    NSRect lastRect     = [[activeNotifications objectAtIndex:[activeNotifications count] - 1] frame];
+    NSRect screenRect = [self screenRect];
+    NSRect lastRect = [[activeNotifications
+        objectAtIndex:[activeNotifications count] - 1] frame];
 
-    if((screenRect.origin.y + screenRect.size.height - lastRect.origin.y - lastRect.size.height) >=
-       (bestRect.size.height + 10.0f))
+    if ((screenRect.origin.y + screenRect.size.height - lastRect.origin.y -
+         lastRect.size.height) >= (bestRect.size.height + 10.0f))
     {
-        if(resultRect != NULL)
+        if (resultRect != NULL)
         {
-            *resultRect = NSMakeRect(
-                                lastRect.origin.x,
-                                lastRect.origin.y + bestRect.size.height + 10.0f,
-                                bestRect.size.width,
-                                bestRect.size.height);
+            *resultRect =
+                NSMakeRect(lastRect.origin.x,
+                           lastRect.origin.y + bestRect.size.height + 10.0f,
+                           bestRect.size.width, bestRect.size.height);
         }
 
         return YES;
     }
 
     lastRect.origin.x += bestRect.size.width + 10.0f;
-    if((lastRect.origin.x + lastRect.size.width) >=
-       (screenRect.origin.x + screenRect.size.width))
+    if ((lastRect.origin.x + lastRect.size.width) >=
+        (screenRect.origin.x + screenRect.size.width))
     {
         return NO;
     }
 
-    if(resultRect != NULL)
+    if (resultRect != NULL)
     {
-        *resultRect = NSMakeRect(
-                            lastRect.origin.x,
-                            screenRect.origin.y,
-                            bestRect.size.width,
-                            bestRect.size.height);
+        *resultRect = NSMakeRect(lastRect.origin.x, screenRect.origin.y,
+                                 bestRect.size.width, bestRect.size.height);
     }
 
     return YES;

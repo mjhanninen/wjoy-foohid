@@ -13,12 +13,12 @@ FOUNDATION_EXPORT NSString *WiimoteWatchdogPingNotification;
 
 @interface WiimoteWatchdog : NSObject
 {
-    @private
-        NSTimer *m_Timer;
-        BOOL     m_IsPingNotificationEnabled;
+  @private
+    NSTimer *m_Timer;
+    BOOL m_IsPingNotificationEnabled;
 }
 
-+ (WiimoteWatchdog*)sharedWatchdog;
++ (WiimoteWatchdog *)sharedWatchdog;
 
 - (BOOL)isEnabled;
 - (void)setEnabled:(BOOL)enabled;

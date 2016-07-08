@@ -10,9 +10,10 @@
 
 @implementation WiimoteIRPoint (Private)
 
-+ (WiimoteIRPoint*)pointWithOwner:(Wiimote*)owner index:(NSUInteger)index
++ (WiimoteIRPoint *)pointWithOwner:(Wiimote *)owner index:(NSUInteger)index
 {
-    return [[[WiimoteIRPoint alloc] initWithOwner:owner index:index] autorelease];
+    return
+        [[[WiimoteIRPoint alloc] initWithOwner:owner index:index] autorelease];
 }
 
 - (id)init
@@ -21,28 +22,22 @@
     return nil;
 }
 
-- (id)initWithOwner:(Wiimote*)owner index:(NSUInteger)index
+- (id)initWithOwner:(Wiimote *)owner index:(NSUInteger)index
 {
     self = [super init];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
-    m_Owner         = owner;
-    m_Position      = NSZeroPoint;
-    m_IsOutOfView   = YES;
-    m_Index         = index;
+    m_Owner = owner;
+    m_Position = NSZeroPoint;
+    m_IsOutOfView = YES;
+    m_Index = index;
 
     return self;
 }
 
-- (void)setPosition:(NSPoint)position
-{
-    m_Position = position;
-}
+- (void)setPosition:(NSPoint)position { m_Position = position; }
 
-- (void)setOutOfView:(BOOL)outOfView
-{
-    m_IsOutOfView = outOfView;
-}
+- (void)setOutOfView:(BOOL)outOfView { m_IsOutOfView = outOfView; }
 
 @end

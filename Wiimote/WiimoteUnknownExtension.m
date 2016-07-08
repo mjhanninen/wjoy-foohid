@@ -16,9 +16,7 @@
     [WiimoteExtension registerExtensionClass:[WiimoteUnknownExtension class]];
 }
 
-+ (void)probe:(WiimoteIOManager*)ioManager
-       target:(id)target
-       action:(SEL)action
++ (void)probe:(WiimoteIOManager *)ioManager target:(id)target action:(SEL)action
 {
     [WiimoteExtension probeFinished:YES target:target action:action];
 }

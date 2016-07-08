@@ -8,73 +8,62 @@
 
 #import "HIDDevice+Private.h"
 
-static void HIDDeviceReportCallback(
-                                void            *context, 
-                                IOReturn         result, 
-                                void            *sender, 
-                                IOHIDReportType  type, 
-                                uint32_t         reportID,
-                                uint8_t         *report, 
-                                CFIndex          reportLength)
+static void
+HIDDeviceReportCallback(void *context, IOReturn result, void *sender,
+                        IOHIDReportType type, uint32_t reportID,
+                        uint8_t *report, CFIndex reportLength)
 {
-    if(reportLength > 0)
+    if (reportLength > 0)
     {
-        [(HIDDevice*)context
-                    handleReport:report
-                          length:reportLength];
+        [(HIDDevice *)context handleReport:report length:reportLength];
     }
 }
 
-static void HIDDeviceDisconnectCallback(
-								void			*context, 
-								IOReturn		 result, 
-								void			*sender)
+static void
+HIDDeviceDisconnectCallback(void *context, IOReturn result, void *sender)
 {
-    [(HIDDevice*)context disconnected];
+    [(HIDDevice *)context disconnected];
 }
 
 @implementation HIDDevice (Private)
 
-- (id)propertyForKey:(NSString*)key
+- (id)propertyForKey:(NSString *)key
 {
     return ((id)IOHIDDeviceGetProperty(m_Handle, (CFStringRef)key));
 }
 
-- (NSDictionary*)makePropertiesDictionary
+- (NSDictionary *)makePropertiesDictionary
 {
-    static CFStringRef keys[] =
+    static CFStringRef keys[] = {CFSTR(kIOHIDTransportKey),
+                                 CFSTR(kIOHIDVendorIDKey),
+                                 CFSTR(kIOHIDVendorIDSourceKey),
+                                 CFSTR(kIOHIDProductIDKey),
+                                 CFSTR(kIOHIDVersionNumberKey),
+                                 CFSTR(kIOHIDManufacturerKey),
+                                 CFSTR(kIOHIDProductKey),
+                                 CFSTR(kIOHIDSerialNumberKey),
+                                 CFSTR(kIOHIDCountryCodeKey),
+                                 CFSTR(kIOHIDLocationIDKey),
+                                 CFSTR(kIOHIDDeviceUsageKey),
+                                 CFSTR(kIOHIDDeviceUsagePageKey),
+                                 CFSTR(kIOHIDDeviceUsagePairsKey),
+                                 CFSTR(kIOHIDPrimaryUsageKey),
+                                 CFSTR(kIOHIDPrimaryUsagePageKey),
+                                 CFSTR(kIOHIDMaxInputReportSizeKey),
+                                 CFSTR(kIOHIDMaxOutputReportSizeKey),
+                                 CFSTR(kIOHIDMaxFeatureReportSizeKey),
+                                 CFSTR(kIOHIDReportIntervalKey),
+                                 NULL};
+
+    CFStringRef *current = keys;
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+
+    while (*current != NULL)
     {
-        CFSTR(kIOHIDTransportKey),
-        CFSTR(kIOHIDVendorIDKey),
-        CFSTR(kIOHIDVendorIDSourceKey),
-        CFSTR(kIOHIDProductIDKey),
-        CFSTR(kIOHIDVersionNumberKey),
-        CFSTR(kIOHIDManufacturerKey),
-        CFSTR(kIOHIDProductKey),
-        CFSTR(kIOHIDSerialNumberKey),
-        CFSTR(kIOHIDCountryCodeKey),
-        CFSTR(kIOHIDLocationIDKey),
-        CFSTR(kIOHIDDeviceUsageKey),
-        CFSTR(kIOHIDDeviceUsagePageKey),
-        CFSTR(kIOHIDDeviceUsagePairsKey),
-        CFSTR(kIOHIDPrimaryUsageKey),
-        CFSTR(kIOHIDPrimaryUsagePageKey),
-        CFSTR(kIOHIDMaxInputReportSizeKey),
-        CFSTR(kIOHIDMaxOutputReportSizeKey),
-        CFSTR(kIOHIDMaxFeatureReportSizeKey),
-        CFSTR(kIOHIDReportIntervalKey),
-        NULL
-    };
+        NSString *key = (NSString *)*current;
+        id value = [self propertyForKey:key];
 
-    CFStringRef         *current    = keys;
-    NSMutableDictionary *result     = [NSMutableDictionary dictionary];
-
-    while(*current != NULL)
-    {
-        NSString    *key   = (NSString*)*current;
-        id           value = [self propertyForKey:key];
-
-        if(value != nil)
+        if (value != nil)
             [result setObject:value forKey:key];
 
         current++;
@@ -85,39 +74,40 @@ static void HIDDeviceDisconnectCallback(
 
 - (NSUInteger)maxInputReportSize
 {
-    NSUInteger result = [[[self properties]
-                                    objectForKey:(id)CFSTR(kIOHIDMaxInputReportSizeKey)]
-                                unsignedIntegerValue];
+    NSUInteger result =
+        [[[self properties] objectForKey:(id)CFSTR(kIOHIDMaxInputReportSizeKey)]
+            unsignedIntegerValue];
 
-    if(result == 0)
+    if (result == 0)
         result = 128;
 
     return result;
 }
 
-- (id)initWithOwner:(HIDManager*)manager
+- (id)initWithOwner:(HIDManager *)manager
           deviceRef:(IOHIDDeviceRef)handle
             options:(IOOptionBits)options
 {
     self = [super init];
 
-    if(self == nil)
+    if (self == nil)
         return nil;
 
-    if(handle == NULL)
+    if (handle == NULL)
     {
         [self release];
         return nil;
     }
 
-    m_Owner             = manager;
-    m_IsValid           = YES;
-    m_IsDisconnected    = NO;
-    m_Handle            = handle;
-    m_Options           = options;
-    m_Properties        = [[self makePropertiesDictionary] retain];
-    m_ReportBuffer      = [[NSMutableData alloc] initWithLength:[self maxInputReportSize]];
-    m_Delegate          = nil;
+    m_Owner = manager;
+    m_IsValid = YES;
+    m_IsDisconnected = NO;
+    m_Handle = handle;
+    m_Options = options;
+    m_Properties = [[self makePropertiesDictionary] retain];
+    m_ReportBuffer =
+        [[NSMutableData alloc] initWithLength:[self maxInputReportSize]];
+    m_Delegate = nil;
 
     CFRetain(m_Handle);
 
@@ -128,45 +118,35 @@ static void HIDDeviceDisconnectCallback(
 
 - (BOOL)openDevice
 {
-	IOHIDDeviceScheduleWithRunLoop(
-                                m_Handle,
-                                [[NSRunLoop currentRunLoop] getCFRunLoop],
-                                (CFStringRef)NSRunLoopCommonModes);
+    IOHIDDeviceScheduleWithRunLoop(m_Handle,
+                                   [[NSRunLoop currentRunLoop] getCFRunLoop],
+                                   (CFStringRef)NSRunLoopCommonModes);
 
-    IOHIDDeviceRegisterInputReportCallback( 
-                                m_Handle, 
-                                [m_ReportBuffer mutableBytes], 
-                                [m_ReportBuffer length],
-                                HIDDeviceReportCallback, 
-                                self);
+    IOHIDDeviceRegisterInputReportCallback(
+        m_Handle, [m_ReportBuffer mutableBytes], [m_ReportBuffer length],
+        HIDDeviceReportCallback, self);
 
-    IOHIDDeviceRegisterRemovalCallback( 
-                                m_Handle, 
-                                HIDDeviceDisconnectCallback, 
-                                self);
+    IOHIDDeviceRegisterRemovalCallback(m_Handle, HIDDeviceDisconnectCallback,
+                                       self);
 
-	return (IOHIDDeviceOpen(m_Handle, m_Options) == kIOReturnSuccess);
+    return (IOHIDDeviceOpen(m_Handle, m_Options) == kIOReturnSuccess);
 }
 
 - (void)closeDevice
 {
-    if(!m_IsDisconnected)
+    if (!m_IsDisconnected)
     {
         IOHIDDeviceClose(m_Handle, 0);
 
         IOHIDDeviceUnscheduleFromRunLoop(
-                                    m_Handle,
-                                    [[NSRunLoop currentRunLoop] getCFRunLoop],
-                                    (CFStringRef)NSRunLoopCommonModes);
+            m_Handle, [[NSRunLoop currentRunLoop] getCFRunLoop],
+            (CFStringRef)NSRunLoopCommonModes);
     }
 }
 
-- (void)handleReport:(uint8_t*)report length:(CFIndex)length
+- (void)handleReport:(uint8_t *)report length:(CFIndex)length
 {
-    [[self delegate]
-                HIDDevice:self
-       reportDataReceived:report
-                   length:length];
+    [[self delegate] HIDDevice:self reportDataReceived:report length:length];
 }
 
 - (void)disconnected

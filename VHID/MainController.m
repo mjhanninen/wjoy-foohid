@@ -13,20 +13,21 @@
 - (id)init
 {
     self = [super init];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
-    m_MouseState    = [[VHIDDevice alloc] initWithType:VHIDDeviceTypeMouse
-                                          pointerCount:6
-                                           buttonCount:2
-                                            isRelative:YES];
+    m_MouseState = [[VHIDDevice alloc] initWithType:VHIDDeviceTypeMouse
+                                       pointerCount:6
+                                        buttonCount:2
+                                         isRelative:YES];
 
     NSLog(@"%@", m_MouseState);
-    m_VirtualMouse  = [[WJoyDevice alloc] initWithHIDDescriptor:[m_MouseState descriptor]
-                                                  productString:@"Virtual Alxn1 Mouse"];
+    m_VirtualMouse =
+        [[WJoyDevice alloc] initWithHIDDescriptor:[m_MouseState descriptor]
+                                    productString:@"Virtual Alxn1 Mouse"];
 
     [m_MouseState setDelegate:self];
-    if(m_VirtualMouse == nil || m_MouseState == nil)
+    if (m_VirtualMouse == nil || m_MouseState == nil)
         NSLog(@"error");
 
     return self;
@@ -39,16 +40,16 @@
     [super dealloc];
 }
 
-- (void)VHIDDevice:(VHIDDevice*)device stateChanged:(NSData*)state
+- (void)VHIDDevice:(VHIDDevice *)device stateChanged:(NSData *)state
 {
     [m_VirtualMouse updateHIDState:state];
 }
 
-- (void)testView:(TestView*)view keyPressed:(TestViewKey)key
+- (void)testView:(TestView *)view keyPressed:(TestViewKey)key
 {
     NSPoint newPosition = NSZeroPoint;
 
-    switch(key)
+    switch (key)
     {
         case TestViewKeyUp:
             newPosition.y += 0.025f;

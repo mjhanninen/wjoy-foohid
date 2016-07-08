@@ -11,8 +11,8 @@
 
 @interface WJoyAdminToolRight : NSObject
 {
-    @private
-        AuthorizationRef m_AuthRef;
+  @private
+    AuthorizationRef m_AuthRef;
 }
 
 - (BOOL)isObtained;

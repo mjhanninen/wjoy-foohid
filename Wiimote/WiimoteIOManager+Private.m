@@ -16,14 +16,14 @@
     return nil;
 }
 
-- (id)initWithOwner:(Wiimote*)owner device:(WiimoteDevice*)device
+- (id)initWithOwner:(Wiimote *)owner device:(WiimoteDevice *)device
 {
     self = [super init];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
-    m_Owner     = owner;
-    m_Device    = device;
+    m_Owner = owner;
+    m_Device = device;
 
     return self;
 }

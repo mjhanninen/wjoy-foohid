@@ -15,13 +15,13 @@ FOUNDATION_EXPORT NSString *HIDManagerDeviceKey;
 
 @interface HIDManager : NSObject
 {
-    @private
-        IOHIDManagerRef  m_Handle;
-        NSMutableSet    *m_ConnectedDevices;
+  @private
+    IOHIDManagerRef m_Handle;
+    NSMutableSet *m_ConnectedDevices;
 }
 
-+ (HIDManager*)manager;
++ (HIDManager *)manager;
 
-- (NSSet*)connectedDevices;
+- (NSSet *)connectedDevices;
 
 @end

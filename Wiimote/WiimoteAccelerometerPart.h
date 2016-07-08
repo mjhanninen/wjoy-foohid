@@ -12,11 +12,11 @@
 
 @interface WiimoteAccelerometerPart : WiimotePart
 {
-    @private
-        BOOL                     m_IsCalibrationDataReaded;
-        WiimoteAccelerometer    *m_Accelerometer;
+  @private
+    BOOL m_IsCalibrationDataReaded;
+    WiimoteAccelerometer *m_Accelerometer;
 }
 
-- (WiimoteAccelerometer*)accelerometer;
+- (WiimoteAccelerometer *)accelerometer;
 
 @end

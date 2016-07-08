@@ -14,16 +14,16 @@
 
 @interface WiimoteExtensionPart : WiimotePart
 {
-    @private
-        BOOL                         m_IsExtensionConnected;
-        WiimoteExtensionHelper      *m_ProbeHelper;
-        WiimoteMotionPlusDetector   *m_MotionPlusDetector;
-        WiimoteExtension            *m_Extension;
+  @private
+    BOOL m_IsExtensionConnected;
+    WiimoteExtensionHelper *m_ProbeHelper;
+    WiimoteMotionPlusDetector *m_MotionPlusDetector;
+    WiimoteExtension *m_Extension;
 }
 
 + (void)registerExtensionClass:(Class)cls;
 
-- (WiimoteExtension*)connectedExtension;
+- (WiimoteExtension *)connectedExtension;
 
 - (void)detectMotionPlus;
 - (void)reconnectExtension;

@@ -6,8 +6,8 @@
 //  Copyright 2012 alxn1. All rights reserved.
 //
 
-#import "WiimoteEventDispatcher+Vibration.h"
 #import "WiimoteDelegate.h"
+#import "WiimoteEventDispatcher+Vibration.h"
 
 @implementation WiimoteEventDispatcher (Vibration)
 
@@ -15,7 +15,7 @@
 {
     [[self delegate] wiimote:[self owner] vibrationStateChanged:state];
 
-    if([self isStateNotificationsEnabled])
+    if ([self isStateNotificationsEnabled])
     {
         [self postNotification:WiimoteVibrationStateChangedNotification
                          param:[NSNumber numberWithBool:state]

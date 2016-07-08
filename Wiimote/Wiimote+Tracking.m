@@ -10,27 +10,24 @@
 
 @implementation Wiimote (Tracking)
 
-+ (NSMutableArray*)mutableConnectedWiimotes
++ (NSMutableArray *)mutableConnectedWiimotes
 {
     static NSMutableArray *result = nil;
 
-    if(result == nil)
+    if (result == nil)
         result = [[NSMutableArray alloc] init];
 
     return result;
 }
 
-+ (NSArray*)connectedWiimotes
-{
-    return [self mutableConnectedWiimotes];
-}
++ (NSArray *)connectedWiimotes { return [self mutableConnectedWiimotes]; }
 
-+ (void)wiimoteConnected:(Wiimote*)wiimote
++ (void)wiimoteConnected:(Wiimote *)wiimote
 {
     [[self mutableConnectedWiimotes] addObject:wiimote];
 }
 
-+ (void)wiimoteDisconnected:(Wiimote*)wiimote
++ (void)wiimoteDisconnected:(Wiimote *)wiimote
 {
     [[self mutableConnectedWiimotes] removeObject:wiimote];
 }

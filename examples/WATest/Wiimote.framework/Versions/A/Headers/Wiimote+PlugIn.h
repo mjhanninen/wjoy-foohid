@@ -7,16 +7,16 @@
 //
 
 #import <Wiimote/Wiimote.h>
-#import <Wiimote/WiimotePart.h>
-#import <Wiimote/WiimoteGenericExtension.h>
 #import <Wiimote/WiimoteAccelerometer+PlugIn.h>
+#import <Wiimote/WiimoteGenericExtension.h>
+#import <Wiimote/WiimotePart.h>
 
 @interface Wiimote (PlugIn)
 
-+ (void)registerSupportedModelName:(NSString*)name;
++ (void)registerSupportedModelName:(NSString *)name;
 
 - (void)deviceConfigurationChanged;
 
-- (WiimotePart*)partWithClass:(Class)cls;
+- (WiimotePart *)partWithClass:(Class)cls;
 
 @end

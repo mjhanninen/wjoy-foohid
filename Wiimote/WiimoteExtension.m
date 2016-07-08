@@ -10,14 +10,8 @@
 
 @implementation WiimoteExtension
 
-- (Wiimote*)owner
-{
-	return [[m_Owner retain] autorelease];
-}
+- (Wiimote *)owner { return [[m_Owner retain] autorelease]; }
 
-- (NSString*)name
-{
-    return @"Unknown";
-}
+- (NSString *)name { return @"Unknown"; }
 
 @end

@@ -13,6 +13,6 @@
 @interface WiimoteEventDispatcher (IR)
 
 - (void)postIREnabledStateChangedNotification:(BOOL)enabled;
-- (void)postIRPointPositionChangedNotification:(WiimoteIRPoint*)point;
+- (void)postIRPointPositionChangedNotification:(WiimoteIRPoint *)point;
 
 @end

@@ -13,24 +13,24 @@
 
 @protocol NotificationSystemDelegate
 
-- (void)notificationSystem:(NotificationSystem*)system
-       notificationClicked:(UserNotification*)notification;
+- (void)notificationSystem:(NotificationSystem *)system
+       notificationClicked:(UserNotification *)notification;
 
 @end
 
 @interface NotificationSystem : NSObject
 {
-    @private
-        NotificationLayoutManager       *m_LayoutManager;
-        NSMutableArray                  *m_NotificationQueue;
-        NSMutableArray                  *m_ActiveNotifications;
+  @private
+    NotificationLayoutManager *m_LayoutManager;
+    NSMutableArray *m_NotificationQueue;
+    NSMutableArray *m_ActiveNotifications;
 
-        NSTimeInterval                   m_NotificationTimeout;
+    NSTimeInterval m_NotificationTimeout;
 
-        id<NotificationSystemDelegate>   m_Delegate;
+    id<NotificationSystemDelegate> m_Delegate;
 }
 
-+ (NotificationSystem*)sharedInstance;
++ (NotificationSystem *)sharedInstance;
 
 - (NSTimeInterval)notificationTimeout;
 - (void)setNotificationTimeout:(NSTimeInterval)timeout;
@@ -38,7 +38,7 @@
 - (UserNotificationCenterScreenCorner)screenCorner;
 - (void)setScreenCorner:(UserNotificationCenterScreenCorner)corner;
 
-- (void)deliver:(UserNotification*)notification;
+- (void)deliver:(UserNotification *)notification;
 
 - (id<NotificationSystemDelegate>)delegate;
 - (void)setDelegate:(id<NotificationSystemDelegate>)obj;

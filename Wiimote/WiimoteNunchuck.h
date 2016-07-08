@@ -6,23 +6,22 @@
 //  Copyright 2012 alxn1. All rights reserved.
 //
 
-#import "WiimoteGenericExtension.h"
 #import "WiimoteEventDispatcher+Nunchuck.h"
+#import "WiimoteGenericExtension.h"
 
 @class WiimoteAccelerometer;
 
-@interface WiimoteNunchuck : WiimoteGenericExtension<
-                                            WiimoteNunchuckProtocol>
+@interface WiimoteNunchuck : WiimoteGenericExtension <WiimoteNunchuckProtocol>
 {
-    @private
-		BOOL								 m_IsCalibrationDataReaded;
+  @private
+    BOOL m_IsCalibrationDataReaded;
 
-        BOOL								 m_ButtonState[WiimoteNunchuckButtonCount];
+    BOOL m_ButtonState[WiimoteNunchuckButtonCount];
 
-		NSPoint								 m_StickPosition;
-        WiimoteDeviceStickCalibrationData	 m_StickCalibrationData;
+    NSPoint m_StickPosition;
+    WiimoteDeviceStickCalibrationData m_StickCalibrationData;
 
-        WiimoteAccelerometer                *m_Accelerometer;
+    WiimoteAccelerometer *m_Accelerometer;
 }
 
 @end

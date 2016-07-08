@@ -10,10 +10,10 @@
 
 @interface StatusBarItemController : NSObject
 {
-    @private
-        NSMenu          *m_Menu;
-        NSStatusItem    *m_Item;
-        NSMenuItem      *m_DiscoveryMenuItem;
+  @private
+    NSMenu *m_Menu;
+    NSStatusItem *m_Item;
+    NSMenuItem *m_DiscoveryMenuItem;
 }
 
 + (void)start;

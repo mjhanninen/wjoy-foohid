@@ -10,6 +10,6 @@
 
 @interface WiimoteIOManager (Private)
 
-- (id)initWithOwner:(Wiimote*)owner device:(WiimoteDevice*)device;
+- (id)initWithOwner:(Wiimote *)owner device:(WiimoteDevice *)device;
 
 @end

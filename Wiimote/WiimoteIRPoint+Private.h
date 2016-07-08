@@ -10,9 +10,9 @@
 
 @interface WiimoteIRPoint (Private)
 
-+ (WiimoteIRPoint*)pointWithOwner:(Wiimote*)owner index:(NSUInteger)index;
++ (WiimoteIRPoint *)pointWithOwner:(Wiimote *)owner index:(NSUInteger)index;
 
-- (id)initWithOwner:(Wiimote*)owner index:(NSUInteger)index;
+- (id)initWithOwner:(Wiimote *)owner index:(NSUInteger)index;
 
 - (void)setPosition:(NSPoint)position;
 - (void)setOutOfView:(BOOL)outOfView;

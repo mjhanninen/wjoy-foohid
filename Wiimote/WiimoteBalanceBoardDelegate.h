@@ -27,12 +27,13 @@ FOUNDATION_EXPORT NSString *WiimoteBalanceBoardBottomRightPressKey;
 
 @end
 
-typedef WiimoteExtension<WiimoteBalanceBoardProtocol> WiimoteBalanceBoardExtension;
+typedef WiimoteExtension<WiimoteBalanceBoardProtocol>
+    WiimoteBalanceBoardExtension;
 
 @interface NSObject (WiimoteBalanceBoardDelegate)
 
-- (void)     wiimote:(Wiimote*)wiimote
-        balanceBoard:(WiimoteBalanceBoardExtension*)balanceBoard
+- (void)wiimote:(Wiimote *)wiimote
+        balanceBoard:(WiimoteBalanceBoardExtension *)balanceBoard
         topLeftPress:(double)topLeft
        topRightPress:(double)topRight
      bottomLeftPress:(double)bottomLeft

@@ -10,33 +10,33 @@
 
 @interface WiimoteExtensionHelper : NSObject
 {
-    @private
-        Wiimote                 *m_Wiimote;
-        WiimoteEventDispatcher  *m_EventDispatcher;
-        WiimoteIOManager        *m_IOManager;
+  @private
+    Wiimote *m_Wiimote;
+    WiimoteEventDispatcher *m_EventDispatcher;
+    WiimoteIOManager *m_IOManager;
 
-        NSMutableArray          *m_ExtensionClasses;
-        Class                    m_CurrentClass;
-        WiimoteExtension        *m_Extension;
-        WiimoteExtension        *m_SubExtension;
+    NSMutableArray *m_ExtensionClasses;
+    Class m_CurrentClass;
+    WiimoteExtension *m_Extension;
+    WiimoteExtension *m_SubExtension;
 
-        BOOL                     m_IsInitialized;
-        BOOL                     m_IsStarted;
-        BOOL                     m_IsCanceled;
+    BOOL m_IsInitialized;
+    BOOL m_IsStarted;
+    BOOL m_IsCanceled;
 
-        id                       m_Target;
-        SEL                      m_Action;
+    id m_Target;
+    SEL m_Action;
 }
 
-- (id)initWithWiimote:(Wiimote*)wiimote
-      eventDispatcher:(WiimoteEventDispatcher*)dispatcher
-            ioManager:(WiimoteIOManager*)ioManager
-     extensionClasses:(NSArray*)extensionClasses
-         subExtension:(WiimoteExtension*)extension
+- (id)initWithWiimote:(Wiimote *)wiimote
+      eventDispatcher:(WiimoteEventDispatcher *)dispatcher
+            ioManager:(WiimoteIOManager *)ioManager
+     extensionClasses:(NSArray *)extensionClasses
+         subExtension:(WiimoteExtension *)extension
                target:(id)target
                action:(SEL)action;
 
-- (WiimoteExtension*)subExtension;
+- (WiimoteExtension *)subExtension;
 
 - (void)start;
 - (void)cancel;

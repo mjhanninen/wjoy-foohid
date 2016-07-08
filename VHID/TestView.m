@@ -10,20 +10,11 @@
 
 @implementation TestView
 
-- (BOOL)acceptsFirstResponder
-{
-    return YES;
-}
+- (BOOL)acceptsFirstResponder { return YES; }
 
-- (BOOL)becomeFirstResponder
-{
-    return YES;
-}
+- (BOOL)becomeFirstResponder { return YES; }
 
-- (BOOL)resignFirstResponder
-{
-    return NO;
-}
+- (BOOL)resignFirstResponder { return NO; }
 
 - (void)moveRight:(id)sender
 {
@@ -45,14 +36,8 @@
     [m_Delegate testView:self keyPressed:TestViewKeyDown];
 }
 
-- (id<TestViewDelegate>)delegate
-{
-    return m_Delegate;
-}
+- (id<TestViewDelegate>)delegate { return m_Delegate; }
 
-- (void)setDelegate:(id<TestViewDelegate>)obj
-{
-    m_Delegate = obj;
-}
+- (void)setDelegate:(id<TestViewDelegate>)obj { m_Delegate = obj; }
 
 @end

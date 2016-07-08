@@ -8,28 +8,27 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum
-{
+typedef enum {
     LoginItemsListDomainUser,
     LoginItemsListDomainSystem
 } LoginItemsListDomain;
 
 @interface LoginItemsList : NSObject
 {
-    @private
-        LSSharedFileListRef     m_List;
-        LoginItemsListDomain    m_Domain;
+  @private
+    LSSharedFileListRef m_List;
+    LoginItemsListDomain m_Domain;
 }
 
-+ (LoginItemsList*)userItemsList;
-+ (LoginItemsList*)systemItemsList;
++ (LoginItemsList *)userItemsList;
++ (LoginItemsList *)systemItemsList;
 
 - (LoginItemsListDomain)domain;
 
-- (NSArray*)allPaths;
+- (NSArray *)allPaths;
 
-- (BOOL)isItemWithPathExists:(NSString*)path;
-- (BOOL)addItemWithPath:(NSString*)path;
-- (BOOL)removeItemWithPath:(NSString*)path;
+- (BOOL)isItemWithPathExists:(NSString *)path;
+- (BOOL)addItemWithPath:(NSString *)path;
+- (BOOL)removeItemWithPath:(NSString *)path;
 
 @end

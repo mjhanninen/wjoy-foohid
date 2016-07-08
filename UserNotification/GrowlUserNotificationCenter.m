@@ -9,7 +9,7 @@
 #import "GrowlUserNotificationCenter.h"
 #import <Growl/Growl.h>
 
-#define GrowlNotificationName           @"Notifications"
+#define GrowlNotificationName @"Notifications"
 #define GrowlApplicationBridgeClassName @"GrowlApplicationBridge"
 
 @interface GrowlUserNotificationCenter (PrivatePart)
@@ -17,29 +17,30 @@
 + (BOOL)isAvailable;
 + (Class)growlBridgeClass;
 
-- (void)notificationClicked:(UserNotification*)notification;
+- (void)notificationClicked:(UserNotification *)notification;
 
 @end
 
-@interface GrowlUserNotificationCenterGrowlDelegate : NSObject<GrowlApplicationBridgeDelegate>
+@interface GrowlUserNotificationCenterGrowlDelegate
+    : NSObject <GrowlApplicationBridgeDelegate>
 {
-    @private
-        GrowlUserNotificationCenter *m_Owner;
+  @private
+    GrowlUserNotificationCenter *m_Owner;
 }
 
-- (id)initWithOwner:(GrowlUserNotificationCenter*)obj;
+- (id)initWithOwner:(GrowlUserNotificationCenter *)obj;
 
-- (NSDictionary*)registrationDictionaryForGrowl;
+- (NSDictionary *)registrationDictionaryForGrowl;
 - (void)growlNotificationWasClicked:(id)clickContext;
 
 @end
 
 @implementation GrowlUserNotificationCenterGrowlDelegate
 
-- (id)initWithOwner:(GrowlUserNotificationCenter*)obj
+- (id)initWithOwner:(GrowlUserNotificationCenter *)obj
 {
     self = [super init];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
     m_Owner = obj;
@@ -47,35 +48,41 @@
     return self;
 }
 
-- (NSDictionary*)registrationDictionaryForGrowl
+- (NSDictionary *)registrationDictionaryForGrowl
 {
-    NSDictionary *notifications = [NSDictionary dictionaryWithObject:GrowlNotificationName forKey:GrowlNotificationName];
-    NSString     *appName       = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+    NSDictionary *notifications =
+        [NSDictionary dictionaryWithObject:GrowlNotificationName
+                                    forKey:GrowlNotificationName];
+    NSString *appName = [[NSBundle mainBundle]
+        objectForInfoDictionaryKey:@"CFBundleDisplayName"];
 
-    if(appName == nil)
+    if (appName == nil)
     {
-        appName = [[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:(NSString *)kCFBundleNameKey];
-        if(appName == nil)
+        appName = [[[NSBundle mainBundle] localizedInfoDictionary]
+            objectForKey:(NSString *)kCFBundleNameKey];
+        if (appName == nil)
             appName = [[NSProcessInfo processInfo] processName];
     }
 
-	return [NSDictionary dictionaryWithObjectsAndKeys:
-							 appName,                   GROWL_APP_NAME,
-							 [notifications allKeys],   GROWL_NOTIFICATIONS_ALL,
-							 [notifications allKeys],   GROWL_NOTIFICATIONS_DEFAULT,
-							 notifications,             GROWL_NOTIFICATIONS_HUMAN_READABLE_NAMES,
-							 nil];
+    return [NSDictionary
+        dictionaryWithObjectsAndKeys:appName, GROWL_APP_NAME,
+                                     [notifications allKeys],
+                                     GROWL_NOTIFICATIONS_ALL,
+                                     [notifications allKeys],
+                                     GROWL_NOTIFICATIONS_DEFAULT, notifications,
+                                     GROWL_NOTIFICATIONS_HUMAN_READABLE_NAMES,
+                                     nil];
 }
 
 - (void)growlNotificationWasClicked:(id)clickContext
 {
-    UserNotification *notification = [[UserNotification alloc] initWithDictionary:clickContext];
+    UserNotification *notification =
+        [[UserNotification alloc] initWithDictionary:clickContext];
     [m_Owner notificationClicked:notification];
     [notification release];
 }
 
 @end
-
 
 @implementation GrowlUserNotificationCenter
 
@@ -83,9 +90,10 @@
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
-    if([GrowlUserNotificationCenter isAvailable])
+    if ([GrowlUserNotificationCenter isAvailable])
     {
-        GrowlUserNotificationCenter *center = [[GrowlUserNotificationCenter alloc] init];
+        GrowlUserNotificationCenter *center =
+            [[GrowlUserNotificationCenter alloc] init];
         [UserNotificationCenter registerImpl:center];
         [center release];
     }
@@ -96,16 +104,18 @@
 - (void)delayInit
 {
     // Fix for 10.9 DP4/5
-    [[GrowlUserNotificationCenter growlBridgeClass] setGrowlDelegate:(id)m_GrowlDelegate];
+    [[GrowlUserNotificationCenter growlBridgeClass]
+        setGrowlDelegate:(id)m_GrowlDelegate];
 }
 
 - (id)init
 {
     self = [super init];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
-    m_GrowlDelegate = [[GrowlUserNotificationCenterGrowlDelegate alloc] initWithOwner:self];
+    m_GrowlDelegate =
+        [[GrowlUserNotificationCenterGrowlDelegate alloc] initWithOwner:self];
 
     [self performSelector:@selector(delayInit)
                withObject:nil
@@ -127,33 +137,26 @@
     return [[GrowlUserNotificationCenter growlBridgeClass] isGrowlRunning];
 }
 
-- (NSString*)name
-{
-    return @"growl";
-}
+- (NSString *)name { return @"growl"; }
 
-- (NSUInteger)merit
-{
-    return 1;
-}
+- (NSUInteger)merit { return 1; }
 
-- (void)deliver:(UserNotification*)notification
+- (void)deliver:(UserNotification *)notification
 {
-    if(![UserNotificationCenter
-                    shouldDeliverNotification:notification
-                                       center:self])
+    if (![UserNotificationCenter shouldDeliverNotification:notification
+                                                    center:self])
     {
         return;
     }
 
     [[GrowlUserNotificationCenter growlBridgeClass]
-                                            notifyWithTitle:[notification title]
-                                                description:[notification text]
-                                           notificationName:GrowlNotificationName
-                                                   iconData:nil
-                                                   priority:0
-                                                   isSticky:NO
-                                               clickContext:[notification asDictionary]];
+         notifyWithTitle:[notification title]
+             description:[notification text]
+        notificationName:GrowlNotificationName
+                iconData:nil
+                priority:0
+                isSticky:NO
+            clickContext:[notification asDictionary]];
 }
 
 @end
@@ -169,30 +172,33 @@
 {
     static Class result = nil;
 
-    if(result == nil)
+    if (result == nil)
     {
-        NSString *frameworksPath        = [[[NSBundle bundleForClass:[GrowlUserNotificationCenter class]] bundlePath]
-                                                                    stringByAppendingPathComponent:@"Versions/A/Frameworks"];
+        NSString *frameworksPath = [[[NSBundle
+            bundleForClass:[GrowlUserNotificationCenter class]] bundlePath]
+            stringByAppendingPathComponent:@"Versions/A/Frameworks"];
 
-        NSString *growlFrameworkPath    = [frameworksPath stringByAppendingPathComponent:@"Growl.framework"];
+        NSString *growlFrameworkPath =
+            [frameworksPath stringByAppendingPathComponent:@"Growl.framework"];
 
-        if([[NSBundle bundleWithPath:growlFrameworkPath] load])
+        if ([[NSBundle bundleWithPath:growlFrameworkPath] load])
         {
             result = NSClassFromString(GrowlApplicationBridgeClassName);
-            if(result != nil)
+            if (result != nil)
                 return result;
         }
 
-        growlFrameworkPath = [frameworksPath stringByAppendingPathComponent:@"10.5/Growl.framework"];
+        growlFrameworkPath = [frameworksPath
+            stringByAppendingPathComponent:@"10.5/Growl.framework"];
 
-        if([[NSBundle bundleWithPath:growlFrameworkPath] load])
+        if ([[NSBundle bundleWithPath:growlFrameworkPath] load])
             result = NSClassFromString(GrowlApplicationBridgeClassName);
     }
 
     return result;
 }
 
-- (void)notificationClicked:(UserNotification*)notification
+- (void)notificationClicked:(UserNotification *)notification
 {
     [UserNotificationCenter notificationClicked:notification center:self];
 }

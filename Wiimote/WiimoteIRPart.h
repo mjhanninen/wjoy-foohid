@@ -12,19 +12,19 @@
 
 @interface WiimoteIRPart : WiimotePart
 {
-    @private
-        BOOL         m_IsEnabled;
-        BOOL         m_IsHardwareEnabled;
-        NSInteger    m_IRReportMode;
-        NSInteger    m_ReportType;
-        NSInteger    m_ReportCounter;
+  @private
+    BOOL m_IsEnabled;
+    BOOL m_IsHardwareEnabled;
+    NSInteger m_IRReportMode;
+    NSInteger m_ReportType;
+    NSInteger m_ReportCounter;
 
-        NSArray     *m_Points;
+    NSArray *m_Points;
 }
 
 - (BOOL)isEnabled;
 - (void)setEnabled:(BOOL)enabled;
 
-- (WiimoteIRPoint*)point:(NSUInteger)index;
+- (WiimoteIRPoint *)point:(NSUInteger)index;
 
 @end

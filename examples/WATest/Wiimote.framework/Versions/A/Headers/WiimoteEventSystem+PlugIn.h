@@ -9,12 +9,16 @@
 
 @interface WiimoteEventSystem (PlugIn)
 
-+ (NSDictionary*)notificationDictionary;
++ (NSDictionary *)notificationDictionary;
 
-+ (void)registerNotification:(NSString*)name selector:(SEL)selector;
++ (void)registerNotification:(NSString *)name selector:(SEL)selector;
 
-- (void)postEventForWiimoteExceptions:(WiimoteExtension*)extension path:(NSString*)path value:(CGFloat)value;
-- (void)postEventForWiimote:(Wiimote*)wiimote path:(NSString*)path value:(CGFloat)value;
-- (void)postEvent:(WiimoteEvent*)event;
+- (void)postEventForWiimoteExceptions:(WiimoteExtension *)extension
+                                 path:(NSString *)path
+                                value:(CGFloat)value;
+- (void)postEventForWiimote:(Wiimote *)wiimote
+                       path:(NSString *)path
+                      value:(CGFloat)value;
+- (void)postEvent:(WiimoteEvent *)event;
 
 @end

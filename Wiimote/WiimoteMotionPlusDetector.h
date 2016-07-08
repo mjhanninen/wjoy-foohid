@@ -6,28 +6,28 @@
 //  Copyright 2012 alxn1. All rights reserved.
 //
 
-#import <Wiimote/WiimoteIOManager.h>
 #import <Wiimote/WiimoteExtension+PlugIn.h>
+#import <Wiimote/WiimoteIOManager.h>
 
 @interface WiimoteMotionPlusDetector : NSObject
 {
-    @private
-        WiimoteIOManager *m_IOManager;
+  @private
+    WiimoteIOManager *m_IOManager;
 
-        id                m_Target;
-        SEL               m_Action;
+    id m_Target;
+    SEL m_Action;
 
-        BOOL              m_IsRun;
-        NSUInteger        m_CancelCount;
-        NSUInteger        m_ReadTryCount;
+    BOOL m_IsRun;
+    NSUInteger m_CancelCount;
+    NSUInteger m_ReadTryCount;
 
-        NSTimer          *m_LastTryTimer;
+    NSTimer *m_LastTryTimer;
 }
 
-+ (void)activateMotionPlus:(WiimoteIOManager*)ioManager
-              subExtension:(WiimoteExtension*)subExtension;
++ (void)activateMotionPlus:(WiimoteIOManager *)ioManager
+              subExtension:(WiimoteExtension *)subExtension;
 
-- (id)initWithIOManager:(WiimoteIOManager*)ioManager
+- (id)initWithIOManager:(WiimoteIOManager *)ioManager
                  target:(id)target
                  action:(SEL)action;
 

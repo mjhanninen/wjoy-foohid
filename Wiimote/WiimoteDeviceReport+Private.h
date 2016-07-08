@@ -10,17 +10,17 @@
 
 @interface WiimoteDeviceReport (Private)
 
-+ (WiimoteDeviceReport*)deviceReportWithType:(NSUInteger)type
-                                        data:(const uint8_t*)data
-                                      length:(NSUInteger)length
-                                      device:(WiimoteDevice*)device;
++ (WiimoteDeviceReport *)deviceReportWithType:(NSUInteger)type
+                                         data:(const uint8_t *)data
+                                       length:(NSUInteger)length
+                                       device:(WiimoteDevice *)device;
 
-- (id)initWithDevice:(WiimoteDevice*)device;
+- (id)initWithDevice:(WiimoteDevice *)device;
 
-- (BOOL)updateFromReportData:(const uint8_t*)data length:(NSUInteger)length;
+- (BOOL)updateFromReportData:(const uint8_t *)data length:(NSUInteger)length;
 
-- (WiimoteDevice*)device;
+- (WiimoteDevice *)device;
 
-- (void)setWiimote:(Wiimote*)wiimote;
+- (void)setWiimote:(Wiimote *)wiimote;
 
 @end

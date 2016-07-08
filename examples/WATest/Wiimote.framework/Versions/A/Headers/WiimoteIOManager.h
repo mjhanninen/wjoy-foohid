@@ -13,23 +13,21 @@
 
 @interface WiimoteIOManager : NSObject
 {
-    @private
-        Wiimote         *m_Owner;
-        WiimoteDevice   *m_Device;
+  @private
+    Wiimote *m_Owner;
+    WiimoteDevice *m_Device;
 }
 
 - (BOOL)postCommand:(WiimoteDeviceCommandType)command
-			   data:(const uint8_t*)data
+               data:(const uint8_t *)data
              length:(NSUInteger)length;
 
 - (BOOL)writeMemory:(NSUInteger)address
-			   data:(const uint8_t*)data
+               data:(const uint8_t *)data
              length:(NSUInteger)length;
 
-- (BOOL)readMemory:(NSRange)memoryRange
-			target:(id)target
-			action:(SEL)action;
+- (BOOL)readMemory:(NSRange)memoryRange target:(id)target action:(SEL)action;
 
-- (Wiimote*)owner;
+- (Wiimote *)owner;
 
 @end

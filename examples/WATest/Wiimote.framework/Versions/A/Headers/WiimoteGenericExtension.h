@@ -12,24 +12,24 @@
 {
 }
 
-+ (NSData*)extensionSignature;
-+ (NSArray*)extensionSignatures;
++ (NSData *)extensionSignature;
++ (NSArray *)extensionSignatures;
 
 + (NSRange)calibrationDataMemoryRange;
 
 + (WiimoteExtensionMeritClass)meritClass;
 + (NSUInteger)minReportDataSize;
 
-- (id)initWithOwner:(Wiimote*)owner
-    eventDispatcher:(WiimoteEventDispatcher*)dispatcher;
+- (id)initWithOwner:(Wiimote *)owner
+    eventDispatcher:(WiimoteEventDispatcher *)dispatcher;
 
 - (BOOL)isSupportMotionPlus;
 - (WiimoteDeviceMotionPlusMode)motionPlusMode;
 
-- (void)handleCalibrationData:(const uint8_t*)data length:(NSUInteger)length;
-- (void)handleReport:(const uint8_t*)extensionData length:(NSUInteger)length;
+- (void)handleCalibrationData:(const uint8_t *)data length:(NSUInteger)length;
+- (void)handleReport:(const uint8_t *)extensionData length:(NSUInteger)length;
 
-- (void)handleMotionPlusReport:(const uint8_t*)extensionData
+- (void)handleMotionPlusReport:(const uint8_t *)extensionData
                         length:(NSUInteger)length;
 
 - (void)disconnected;

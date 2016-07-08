@@ -10,12 +10,12 @@
 
 #import <OCLog/OCLog.h>
 
-@interface MainController : NSObject< OCLogHandler >
+@interface MainController : NSObject <OCLogHandler>
 {
-    @private
-        IBOutlet NSTextView     *m_Log;
-        IBOutlet NSPopUpButton  *m_UserLogLevel;
-        IBOutlet NSTextField    *m_UserInput;
+  @private
+    IBOutlet NSTextView *m_Log;
+    IBOutlet NSPopUpButton *m_UserLogLevel;
+    IBOutlet NSTextField *m_UserInput;
 }
 
 - (IBAction)clearLog:(id)sender;

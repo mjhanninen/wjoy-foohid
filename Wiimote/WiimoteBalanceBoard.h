@@ -6,21 +6,21 @@
 //  Copyright 2012 alxn1. All rights reserved.
 //
 
-#import "WiimoteGenericExtension.h"
 #import "WiimoteEventDispatcher+BalanceBoard.h"
+#import "WiimoteGenericExtension.h"
 
-@interface WiimoteBalanceBoard : WiimoteGenericExtension<
-                                                WiimoteBalanceBoardProtocol>
+@interface WiimoteBalanceBoard
+    : WiimoteGenericExtension <WiimoteBalanceBoardProtocol>
 {
-    @private
-        BOOL                                m_IsCalibrationDataReaded;
+  @private
+    BOOL m_IsCalibrationDataReaded;
 
-        double                              m_TopLeftPress;
-        double                              m_TopRightPress;
-        double                              m_BottomLeftPress;
-        double                              m_BottomRightPress;
+    double m_TopLeftPress;
+    double m_TopRightPress;
+    double m_BottomLeftPress;
+    double m_BottomRightPress;
 
-        WiimoteBalanceBoardCalibrationData  m_CalibrationData;
+    WiimoteBalanceBoardCalibrationData m_CalibrationData;
 }
 
 @end

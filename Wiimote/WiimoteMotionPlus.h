@@ -9,16 +9,16 @@
 #import "WiimoteExtension+PlugIn.h"
 #import "WiimoteMotionPlusDelegate.h"
 
-@interface WiimoteMotionPlus : WiimoteExtension<WiimoteMotionPlusProtocol>
+@interface WiimoteMotionPlus : WiimoteExtension <WiimoteMotionPlusProtocol>
 {
-    @private
-        WiimoteIOManager		*m_IOManager;
-        WiimoteExtension		*m_SubExtension;
-		NSUInteger				 m_ReportCounter;
-		NSUInteger				 m_ExtensionReportCounter;
+  @private
+    WiimoteIOManager *m_IOManager;
+    WiimoteExtension *m_SubExtension;
+    NSUInteger m_ReportCounter;
+    NSUInteger m_ExtensionReportCounter;
 
-		BOOL					 m_IsSubExtensionDisconnected;
-        WiimoteMotionPlusReport  m_Report;
+    BOOL m_IsSubExtensionDisconnected;
+    WiimoteMotionPlusReport m_Report;
 }
 
 @end

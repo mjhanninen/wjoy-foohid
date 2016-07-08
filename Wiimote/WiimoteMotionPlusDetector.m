@@ -10,61 +10,65 @@
 
 #import "WiimoteLog.h"
 
-#define WiimoteDeviceMotionPlusDetectTriesCount      4
-#define WiimoteDeviceMotionPlusLastTryDelay          8.0
+#define WiimoteDeviceMotionPlusDetectTriesCount 4
+#define WiimoteDeviceMotionPlusLastTryDelay 8.0
 
 @interface WiimoteMotionPlusDetector (PrivatePart)
 
 - (void)initializeMotionPlus;
 - (void)beginReadSignature;
-- (void)signatureReaded:(NSData*)data;
+- (void)signatureReaded:(NSData *)data;
 - (void)detectionFinished:(BOOL)detected;
 
 @end
 
 @implementation WiimoteMotionPlusDetector
 
-+ (NSArray*)motionPlusSignatures
-{ 
-    static const uint8_t  signature1[]   = { 0x00, 0x00, 0xA6, 0x20, 0x00, 0x05 };
-	static const uint8_t  signature2[]   = { 0x00, 0x00, 0xA6, 0x20, 0x04, 0x05 };
-	static const uint8_t  signature3[]   = { 0x00, 0x00, 0xA6, 0x20, 0x05, 0x05 };
-	static const uint8_t  signature4[]   = { 0x00, 0x00, 0xA6, 0x20, 0x07, 0x05 };
-    static const uint8_t  signature5[]   = { 0x00, 0x00, 0xA4, 0x20, 0x00, 0x05 };
-    static const uint8_t  signature6[]   = { 0x01, 0x00, 0xA4, 0x20, 0x00, 0x05 };
++ (NSArray *)motionPlusSignatures
+{
+    static const uint8_t signature1[] = {0x00, 0x00, 0xA6, 0x20, 0x00, 0x05};
+    static const uint8_t signature2[] = {0x00, 0x00, 0xA6, 0x20, 0x04, 0x05};
+    static const uint8_t signature3[] = {0x00, 0x00, 0xA6, 0x20, 0x05, 0x05};
+    static const uint8_t signature4[] = {0x00, 0x00, 0xA6, 0x20, 0x07, 0x05};
+    static const uint8_t signature5[] = {0x00, 0x00, 0xA4, 0x20, 0x00, 0x05};
+    static const uint8_t signature6[] = {0x01, 0x00, 0xA4, 0x20, 0x00, 0x05};
 
-    static NSArray       *result         = nil;
+    static NSArray *result = nil;
 
-    if(result == nil)
-	{
-		result = [[NSArray alloc] initWithObjects:
-					[NSData dataWithBytes:signature1 length:sizeof(signature1)],
-					[NSData dataWithBytes:signature2 length:sizeof(signature2)],
-					[NSData dataWithBytes:signature3 length:sizeof(signature3)],
-					[NSData dataWithBytes:signature4 length:sizeof(signature4)],
-                    [NSData dataWithBytes:signature5 length:sizeof(signature5)],
-                    [NSData dataWithBytes:signature6 length:sizeof(signature6)],
-					nil];
-	}
+    if (result == nil)
+    {
+        result = [[NSArray alloc]
+            initWithObjects:[NSData dataWithBytes:signature1
+                                           length:sizeof(signature1)],
+                            [NSData dataWithBytes:signature2
+                                           length:sizeof(signature2)],
+                            [NSData dataWithBytes:signature3
+                                           length:sizeof(signature3)],
+                            [NSData dataWithBytes:signature4
+                                           length:sizeof(signature4)],
+                            [NSData dataWithBytes:signature5
+                                           length:sizeof(signature5)],
+                            [NSData dataWithBytes:signature6
+                                           length:sizeof(signature6)],
+                            nil];
+    }
 
     return result;
-
 }
 
 + (NSRange)motionPlusSignatureMemRange
 {
-    return NSMakeRange(
-                WiimoteDeviceMotionPlusExtensionProbeAddress,
-                [[[WiimoteMotionPlusDetector motionPlusSignatures] objectAtIndex:0] length]);
+    return NSMakeRange(WiimoteDeviceMotionPlusExtensionProbeAddress,
+                       [[[WiimoteMotionPlusDetector motionPlusSignatures]
+                           objectAtIndex:0] length]);
 }
 
-+ (void)activateMotionPlus:(WiimoteIOManager*)ioManager
-              subExtension:(WiimoteExtension*)subExtension
++ (void)activateMotionPlus:(WiimoteIOManager *)ioManager
+              subExtension:(WiimoteExtension *)subExtension
 {
-	uint8_t data = WiimoteDeviceMotionPlusModeOther;
+    uint8_t data = WiimoteDeviceMotionPlusModeOther;
 
-    if(subExtension != nil &&
-      [subExtension isSupportMotionPlus])
+    if (subExtension != nil && [subExtension isSupportMotionPlus])
     {
         data = [subExtension motionPlusMode];
     }
@@ -82,19 +86,19 @@
     return nil;
 }
 
-- (id)initWithIOManager:(WiimoteIOManager*)ioManager
+- (id)initWithIOManager:(WiimoteIOManager *)ioManager
                  target:(id)target
                  action:(SEL)action
 {
     self = [super init];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
-    m_IOManager     = [ioManager retain];
-    m_Target        = target;
-    m_Action        = action;
-    m_IsRun         = NO;
-    m_CancelCount   = 0;
+    m_IOManager = [ioManager retain];
+    m_Target = target;
+    m_Action = action;
+    m_IsRun = NO;
+    m_CancelCount = 0;
 
     return self;
 }
@@ -106,14 +110,11 @@
     [super dealloc];
 }
 
-- (BOOL)isRun
-{
-    return m_IsRun;
-}
+- (BOOL)isRun { return m_IsRun; }
 
 - (void)run
 {
-    if(m_IsRun)
+    if (m_IsRun)
         return;
 
     m_IsRun = YES;
@@ -124,11 +125,11 @@
 
 - (void)cancel
 {
-    if(!m_IsRun)
+    if (!m_IsRun)
         return;
 
     m_CancelCount++;
-    if(m_LastTryTimer != nil)
+    if (m_LastTryTimer != nil)
     {
         [m_LastTryTimer invalidate];
         m_CancelCount--;
@@ -157,61 +158,63 @@
     m_ReadTryCount++;
     m_LastTryTimer = nil;
 
-    [m_IOManager readMemory:[WiimoteMotionPlusDetector motionPlusSignatureMemRange]
-                     target:self
-                     action:@selector(signatureReaded:)];
+    [m_IOManager
+        readMemory:[WiimoteMotionPlusDetector motionPlusSignatureMemRange]
+            target:self
+            action:@selector(signatureReaded:)];
 
     [self retain];
 }
 
-- (void)signatureReaded:(NSData*)data
+- (void)signatureReaded:(NSData *)data
 {
     W_DEBUG_F(@"Possible wiimote ID: %@", data);
 
     [self autorelease];
 
-    if(m_CancelCount > 0)
+    if (m_CancelCount > 0)
     {
         m_CancelCount--;
         return;
     }
 
-    if(data == nil)
+    if (data == nil)
     {
         [self detectionFinished:NO];
         return;
     }
 
-	NSArray		*signatures		 = [WiimoteMotionPlusDetector motionPlusSignatures];
-	NSUInteger   countSignatures = [signatures count];
+    NSArray *signatures = [WiimoteMotionPlusDetector motionPlusSignatures];
+    NSUInteger countSignatures = [signatures count];
 
-	for(NSUInteger i = 0; i < countSignatures; i++)
-	{
-		if([data isEqualToData:[signatures objectAtIndex:i]])
-		{
-			[self detectionFinished:YES];
-			return;
-		}
-	}
+    for (NSUInteger i = 0; i < countSignatures; i++)
+    {
+        if ([data isEqualToData:[signatures objectAtIndex:i]])
+        {
+            [self detectionFinished:YES];
+            return;
+        }
+    }
 
-    if(m_ReadTryCount >= WiimoteDeviceMotionPlusDetectTriesCount)
+    if (m_ReadTryCount >= WiimoteDeviceMotionPlusDetectTriesCount)
     {
         [self detectionFinished:NO];
         return;
     }
 
-    if(m_ReadTryCount < (WiimoteDeviceMotionPlusDetectTriesCount - 1))
+    if (m_ReadTryCount < (WiimoteDeviceMotionPlusDetectTriesCount - 1))
     {
         usleep(50000);
         [self beginReadSignature];
         return;
     }
 
-    m_LastTryTimer = [NSTimer scheduledTimerWithTimeInterval:WiimoteDeviceMotionPlusLastTryDelay
-                                                      target:self
-                                                    selector:@selector(beginReadSignature)
-                                                    userInfo:nil
-                                                     repeats:NO];
+    m_LastTryTimer = [NSTimer
+        scheduledTimerWithTimeInterval:WiimoteDeviceMotionPlusLastTryDelay
+                                target:self
+                              selector:@selector(beginReadSignature)
+                              userInfo:nil
+                               repeats:NO];
 }
 
 - (void)detectionFinished:(BOOL)detected

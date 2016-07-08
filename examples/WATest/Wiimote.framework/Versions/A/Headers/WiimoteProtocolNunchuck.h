@@ -6,10 +6,9 @@
 //  Copyright 2012 alxn1. All rights reserved.
 //
 
-typedef enum
-{
-	WiimoteDeviceNunchuckReportButtonMaskC  = 0x2,
-	WiimoteDeviceNunchuckReportButtonMaskZ  = 0x1
+typedef enum {
+    WiimoteDeviceNunchuckReportButtonMaskC = 0x2,
+    WiimoteDeviceNunchuckReportButtonMaskZ = 0x1
 } WiimoteDeviceNunchuckReportButtonMask;
 
 typedef struct
@@ -24,6 +23,6 @@ typedef struct
 
 typedef struct
 {
-    WiimoteDeviceAccelerometerCalibrationData   accelerometer;
-    WiimoteDeviceStickCalibrationData           stick;
+    WiimoteDeviceAccelerometerCalibrationData accelerometer;
+    WiimoteDeviceStickCalibrationData stick;
 } WiimoteDeviceNunchuckCalibrationData;

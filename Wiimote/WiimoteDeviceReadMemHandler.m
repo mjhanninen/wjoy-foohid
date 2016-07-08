@@ -13,64 +13,60 @@
 
 - (id)init
 {
-	[[super init] release];
-	return nil;
+    [[super init] release];
+    return nil;
 }
 
 - (id)initWithMemoryRange:(NSRange)memoryRange
-				   target:(id)target
-				   action:(SEL)action
+                   target:(id)target
+                   action:(SEL)action
 {
-	self = [super init];
-	if(self == nil)
-		return nil;
+    self = [super init];
+    if (self == nil)
+        return nil;
 
-	m_MemoryRange	= memoryRange;
-	m_ReadedData	= [[NSMutableData alloc] initWithCapacity:memoryRange.length];
-	m_Target		= target;
-	m_Action		= action;
+    m_MemoryRange = memoryRange;
+    m_ReadedData = [[NSMutableData alloc] initWithCapacity:memoryRange.length];
+    m_Target = target;
+    m_Action = action;
 
-	if(memoryRange.length == 0)
-	{
-		[self release];
-		return nil;
-	}
+    if (memoryRange.length == 0)
+    {
+        [self release];
+        return nil;
+    }
 
-	return self;
+    return self;
 }
 
 - (void)dealloc
 {
-	[m_ReadedData release];
-	[super dealloc];
+    [m_ReadedData release];
+    [super dealloc];
 }
 
 - (void)dataReadFinished
 {
-	if(m_Target != nil &&
-	   m_Action != nil)
-	{
-		[m_Target performSelector:m_Action
+    if (m_Target != nil && m_Action != nil)
+    {
+        [m_Target performSelector:m_Action
                        withObject:m_ReadedData
                        afterDelay:0.0];
-	}
+    }
 }
 
-- (NSRange)memoryRange
-{
-    return m_MemoryRange;
-}
+- (NSRange)memoryRange { return m_MemoryRange; }
 
 - (BOOL)isAllDataReaded
 {
-	return ([m_ReadedData length] >= m_MemoryRange.length);
+    return ([m_ReadedData length] >= m_MemoryRange.length);
 }
 
-- (void)handleData:(const uint8_t*)data length:(NSUInteger)length
+- (void)handleData:(const uint8_t *)data length:(NSUInteger)length
 {
     [m_ReadedData appendBytes:data length:length];
-    if([m_ReadedData length] >= m_MemoryRange.length)
-		[self dataReadFinished];
+    if ([m_ReadedData length] >= m_MemoryRange.length)
+        [self dataReadFinished];
 }
 
 - (void)errorOccured

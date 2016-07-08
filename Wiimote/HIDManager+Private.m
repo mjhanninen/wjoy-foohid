@@ -10,18 +10,18 @@
 
 @implementation HIDManager (Private)
 
-- (void)HIDDeviceDisconnected:(HIDDevice*)device
+- (void)HIDDeviceDisconnected:(HIDDevice *)device
 {
-	[[device retain] autorelease];
+    [[device retain] autorelease];
 
-	[m_ConnectedDevices removeObject:device];
+    [m_ConnectedDevices removeObject:device];
 
     [[NSNotificationCenter defaultCenter]
-                            postNotificationName:HIDManagerDeviceDisconnectedNotification
-                                          object:self
-                                        userInfo:[NSDictionary
-                                                        dictionaryWithObject:device
-                                                                      forKey:HIDManagerDeviceKey]];
+        postNotificationName:HIDManagerDeviceDisconnectedNotification
+                      object:self
+                    userInfo:[NSDictionary
+                                 dictionaryWithObject:device
+                                               forKey:HIDManagerDeviceKey]];
 }
 
 @end

@@ -15,27 +15,29 @@
 
 @interface NSObject (HIDDeviceDelegate)
 
-- (void)HIDDevice:(HIDDevice*)device reportDataReceived:(const uint8_t*)bytes length:(NSUInteger)length;
-- (void)HIDDeviceDisconnected:(HIDDevice*)device;
+- (void)HIDDevice:(HIDDevice *)device
+    reportDataReceived:(const uint8_t *)bytes
+                length:(NSUInteger)length;
+- (void)HIDDeviceDisconnected:(HIDDevice *)device;
 
 @end
 
 @interface HIDDevice : NSObject
 {
-    @private
-        HIDManager      *m_Owner;
+  @private
+    HIDManager *m_Owner;
 
-        BOOL             m_IsValid;
-        IOHIDDeviceRef   m_Handle;
-        IOOptionBits     m_Options;
-        NSDictionary    *m_Properties;
+    BOOL m_IsValid;
+    IOHIDDeviceRef m_Handle;
+    IOOptionBits m_Options;
+    NSDictionary *m_Properties;
 
-        NSMutableData   *m_ReportBuffer;
+    NSMutableData *m_ReportBuffer;
 
-        id               m_Delegate;
+    id m_Delegate;
 }
 
-- (HIDManager*)owner;
+- (HIDManager *)owner;
 
 - (BOOL)isValid;
 - (void)invalidate;
@@ -44,9 +46,9 @@
 - (IOOptionBits)options;
 - (BOOL)setOptions:(IOOptionBits)options;
 
-- (NSDictionary*)properties;
+- (NSDictionary *)properties;
 
-- (BOOL)postBytes:(const uint8_t*)bytes length:(NSUInteger)length;
+- (BOOL)postBytes:(const uint8_t *)bytes length:(NSUInteger)length;
 
 - (id)delegate;
 - (void)setDelegate:(id)delegate;
@@ -55,7 +57,7 @@
 
 @interface HIDDevice (Properties)
 
-- (NSString*)name;
-- (NSString*)address;
+- (NSString *)name;
+- (NSString *)address;
 
 @end

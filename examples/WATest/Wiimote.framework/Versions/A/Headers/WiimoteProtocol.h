@@ -14,15 +14,15 @@
 
 #pragma pack(push, 1)
 
-#import <Wiimote/WiimoteProtocolCommand.h>
-#import <Wiimote/WiimoteProtocolReport.h>
-#import <Wiimote/WiimoteProtocolIR.h>
 #import <Wiimote/WiimoteProtocolCalibration.h>
-#import <Wiimote/WiimoteProtocolExtension.h>
-#import <Wiimote/WiimoteProtocolNunchuck.h>
 #import <Wiimote/WiimoteProtocolClassicController.h>
-#import <Wiimote/WiimoteProtocolUProController.h>
+#import <Wiimote/WiimoteProtocolCommand.h>
+#import <Wiimote/WiimoteProtocolExtension.h>
+#import <Wiimote/WiimoteProtocolIR.h>
 #import <Wiimote/WiimoteProtocolMotionPlus.h>
+#import <Wiimote/WiimoteProtocolNunchuck.h>
+#import <Wiimote/WiimoteProtocolReport.h>
+#import <Wiimote/WiimoteProtocolUProController.h>
 #import <Wiimote/WiimoteProtocolUtils.h>
 
 #pragma pack(pop)

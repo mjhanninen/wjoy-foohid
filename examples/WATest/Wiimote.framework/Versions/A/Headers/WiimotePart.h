@@ -12,26 +12,26 @@
 
 @interface WiimotePart : NSObject
 {
-    @private
-        Wiimote                 *m_Owner;
-        WiimoteEventDispatcher  *m_EventDispatcher;
-        WiimoteIOManager        *m_IOManager;
+  @private
+    Wiimote *m_Owner;
+    WiimoteEventDispatcher *m_EventDispatcher;
+    WiimoteIOManager *m_IOManager;
 }
 
 + (void)registerPartClass:(Class)cls;
 
-- (id)initWithOwner:(Wiimote*)owner
-    eventDispatcher:(WiimoteEventDispatcher*)dispatcher
-          ioManager:(WiimoteIOManager*)ioManager;
+- (id)initWithOwner:(Wiimote *)owner
+    eventDispatcher:(WiimoteEventDispatcher *)dispatcher
+          ioManager:(WiimoteIOManager *)ioManager;
 
-- (Wiimote*)owner;
-- (WiimoteIOManager*)ioManager;
-- (WiimoteEventDispatcher*)eventDispatcher;
+- (Wiimote *)owner;
+- (WiimoteIOManager *)ioManager;
+- (WiimoteEventDispatcher *)eventDispatcher;
 
-- (NSSet*)allowedReportTypeSet;
+- (NSSet *)allowedReportTypeSet;
 
 - (void)connected;
-- (void)handleReport:(WiimoteDeviceReport*)report;
+- (void)handleReport:(WiimoteDeviceReport *)report;
 - (void)disconnected;
 
 @end

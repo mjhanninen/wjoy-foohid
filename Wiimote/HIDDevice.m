@@ -8,18 +8,18 @@
 
 #import "HIDDevice.h"
 
-#import "HIDManager+Private.h"
 #import "HIDDevice+Private.h"
+#import "HIDManager+Private.h"
 
 @implementation NSObject (HIDDeviceDelegate)
 
-- (void)HIDDevice:(HIDDevice*)device reportDataReceived:(const uint8_t*)bytes length:(NSUInteger)length
+- (void)HIDDevice:(HIDDevice *)device
+    reportDataReceived:(const uint8_t *)bytes
+                length:(NSUInteger)length
 {
 }
 
-- (void)HIDDeviceDisconnected:(HIDDevice*)device
-{
-}
+- (void)HIDDeviceDisconnected:(HIDDevice *)device {}
 
 @end
 
@@ -33,7 +33,7 @@
 
 - (void)dealloc
 {
-    if(m_Handle != NULL)
+    if (m_Handle != NULL)
         CFRelease(m_Handle);
 
     [m_Properties release];
@@ -41,54 +41,45 @@
     [super dealloc];
 }
 
-- (HIDManager*)owner
-{
-    return m_Owner;
-}
+- (HIDManager *)owner { return m_Owner; }
 
-- (BOOL)isValid
-{
-    return m_IsValid;
-}
+- (BOOL)isValid { return m_IsValid; }
 
 - (void)invalidate
 {
-    if([self isValid])
+    if ([self isValid])
     {
-        m_IsValid   = NO;
-        m_Options   = kIOHIDOptionsTypeNone;
+        m_IsValid = NO;
+        m_Options = kIOHIDOptionsTypeNone;
 
         [self closeDevice];
 
         [m_Delegate HIDDeviceDisconnected:self];
-		[[HIDManager manager] HIDDeviceDisconnected:self];
+        [[HIDManager manager] HIDDeviceDisconnected:self];
     }
 }
 
-- (IOOptionBits)options
-{
-    return m_Options;
-}
+- (IOOptionBits)options { return m_Options; }
 
 - (BOOL)setOptions:(IOOptionBits)options
 {
-    if(![self isValid])
+    if (![self isValid])
         return NO;
 
-    if(m_Options == options)
+    if (m_Options == options)
         return YES;
 
-	[self closeDevice];
+    [self closeDevice];
 
-	IOOptionBits oldOptions = m_Options;
+    IOOptionBits oldOptions = m_Options;
 
-	m_Options = options;
+    m_Options = options;
 
-    if(![self openDevice])
+    if (![self openDevice])
     {
-		m_Options = oldOptions;
+        m_Options = oldOptions;
 
-        if(![self openDevice])
+        if (![self openDevice])
             [self invalidate];
 
         return NO;
@@ -98,20 +89,16 @@
     return YES;
 }
 
-- (BOOL)postBytes:(const uint8_t*)bytes length:(NSUInteger)length
+- (BOOL)postBytes:(const uint8_t *)bytes length:(NSUInteger)length
 {
     BOOL result = NO;
 
-    if([self isValid])
+    if ([self isValid])
     {
-        if(length > 0)
+        if (length > 0)
         {
-            result = (IOHIDDeviceSetReport(
-                                        m_Handle,
-                                        kIOHIDReportTypeOutput,
-                                        0,
-                                        bytes,
-                                        length) == kIOReturnSuccess);
+            result = (IOHIDDeviceSetReport(m_Handle, kIOHIDReportTypeOutput, 0,
+                                           bytes, length) == kIOReturnSuccess);
         }
         else
             result = YES;
@@ -120,40 +107,26 @@
     return result;
 }
 
-- (NSDictionary*)properties
+- (NSDictionary *)properties { return [[m_Properties retain] autorelease]; }
+
+- (id)delegate { return m_Delegate; }
+
+- (void)setDelegate:(id)delegate { m_Delegate = delegate; }
+
+- (NSString *)description
 {
-    return [[m_Properties retain] autorelease];
+    return [NSString stringWithFormat:@"HIDDevice (%p): %@", self,
+                                      [[self properties] description]];
 }
 
-- (id)delegate
-{
-    return m_Delegate;
-}
-
-- (void)setDelegate:(id)delegate
-{
-    m_Delegate = delegate;
-}
-
-- (NSString*)description
-{
-    return [NSString stringWithFormat:
-                                @"HIDDevice (%p): %@",
-                                self,
-                                [[self properties] description]];
-}
-
-- (NSUInteger)hash
-{
-	return ((NSUInteger)m_Handle);
-}
+- (NSUInteger)hash { return ((NSUInteger)m_Handle); }
 
 - (BOOL)isEqual:(id)object
 {
-    if([object isKindOfClass:[self class]])
-        return (m_Handle == ((HIDDevice*)object)->m_Handle);
+    if ([object isKindOfClass:[self class]])
+        return (m_Handle == ((HIDDevice *)object)->m_Handle);
 
-    if(CFGetTypeID(object) == IOHIDDeviceGetTypeID())
+    if (CFGetTypeID(object) == IOHIDDeviceGetTypeID())
         return (m_Handle == (IOHIDDeviceRef)object);
 
     return NO;
@@ -163,14 +136,15 @@
 
 @implementation HIDDevice (Properties)
 
-- (NSString*)name
+- (NSString *)name
 {
-    return [[self properties] objectForKey:(NSString*)CFSTR(kIOHIDProductKey)];
+    return [[self properties] objectForKey:(NSString *)CFSTR(kIOHIDProductKey)];
 }
 
-- (NSString*)address
+- (NSString *)address
 {
-    return [[self properties] objectForKey:(NSString*)CFSTR(kIOHIDSerialNumberKey)];
+    return [[self properties]
+        objectForKey:(NSString *)CFSTR(kIOHIDSerialNumberKey)];
 }
 
 @end

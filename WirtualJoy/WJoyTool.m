@@ -7,20 +7,20 @@
 //
 
 #import "WJoyTool.h"
-#import "WJoyToolInterface.h"
 #import "WJoyAdminToolRight.h"
+#import "WJoyToolInterface.h"
 
 #define WJoyDeviceDriverName @"wjoy.kext"
 
 @interface WJoyTool (PrivatePart)
 
-+ (NSBundle*)bundle;
-+ (NSString*)toolPath;
-+ (NSString*)driverPath;
++ (NSBundle *)bundle;
++ (NSString *)toolPath;
++ (NSString *)driverPath;
 
 + (BOOL)repairToolRights;
-+ (BOOL)doCommand:(NSString*)command argument:(NSString*)argument;
-+ (BOOL)doLoadOrUnloadCommand:(NSString*)command;
++ (BOOL)doCommand:(NSString *)command argument:(NSString *)argument;
++ (BOOL)doLoadOrUnloadCommand:(NSString *)command;
 
 @end
 
@@ -33,60 +33,51 @@
 
 + (BOOL)unloadDriver
 {
-	return YES;
-	// return [self doLoadOrUnloadCommand:WJoyToolUnloadDriverCommand];
+    return YES;
+    // return [self doLoadOrUnloadCommand:WJoyToolUnloadDriverCommand];
 }
 
 @end
 
 @implementation WJoyTool (PrivatePart)
 
-+ (NSBundle*)bundle
-{
-    return [NSBundle bundleForClass:[self class]];
-}
++ (NSBundle *)bundle { return [NSBundle bundleForClass:[self class]]; }
 
-+ (NSString*)toolPath
++ (NSString *)toolPath
 {
     return [[[self bundle] resourcePath]
-                stringByAppendingPathComponent:WJoyToolName];
+        stringByAppendingPathComponent:WJoyToolName];
 }
 
-+ (NSString*)driverPath
++ (NSString *)driverPath
 {
     return [[[self bundle] resourcePath]
-                stringByAppendingPathComponent:WJoyDeviceDriverName];
+        stringByAppendingPathComponent:WJoyDeviceDriverName];
 }
 
 + (BOOL)repairToolRights
 {
-    WJoyAdminToolRight *rights = [[[WJoyAdminToolRight alloc] init] autorelease];
+    WJoyAdminToolRight *rights =
+        [[[WJoyAdminToolRight alloc] init] autorelease];
 
-    if(![rights obtain])
+    if (![rights obtain])
         return NO;
 
-    char *args[] =
-    {
-        (char*)[WJoyToolRepairRightsCommand UTF8String],
-        0
-    };
+    char *args[] = {(char *)[WJoyToolRepairRightsCommand UTF8String], 0};
 
     FILE *toolOutput = NULL;
-    if(AuthorizationExecuteWithPrivileges(
-                                     [rights authRef],
-                                     [[self toolPath] UTF8String],
-                                     kAuthorizationFlagDefaults,
-                                     args,
-                                    &toolOutput) != noErr)
+    if (AuthorizationExecuteWithPrivileges(
+            [rights authRef], [[self toolPath] UTF8String],
+            kAuthorizationFlagDefaults, args, &toolOutput) != noErr)
     {
         [rights discard];
         return NO;
     }
 
     char buffer[64];
-    while(YES)
+    while (YES)
     {
-        if(fread(buffer, sizeof(buffer), 1, toolOutput) <= 0)
+        if (fread(buffer, sizeof(buffer), 1, toolOutput) <= 0)
             break;
     }
 
@@ -95,7 +86,7 @@
     return YES;
 }
 
-+ (BOOL)doCommand:(NSString*)command argument:(NSString*)argument
++ (BOOL)doCommand:(NSString *)command argument:(NSString *)argument
 {
     NSTask *task = [[NSTask alloc] init];
 
@@ -110,12 +101,12 @@
     return result;
 }
 
-+ (BOOL)doLoadOrUnloadCommand:(NSString*)command
++ (BOOL)doLoadOrUnloadCommand:(NSString *)command
 {
-    if([self doCommand:command argument:[self driverPath]])
+    if ([self doCommand:command argument:[self driverPath]])
         return YES;
 
-    if(![self repairToolRights])
+    if (![self repairToolRights])
         return NO;
 
     return [self doCommand:command argument:[self driverPath]];

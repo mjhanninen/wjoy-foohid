@@ -13,8 +13,8 @@
 
 @interface Wiimote (Create)
 
-+ (void)connectToHIDDevice:(HIDDevice*)device;
-+ (void)connectToBluetoothDevice:(IOBluetoothDevice*)device;
++ (void)connectToHIDDevice:(HIDDevice *)device;
++ (void)connectToBluetoothDevice:(IOBluetoothDevice *)device;
 
 - (id)lowLevelDevice;
 

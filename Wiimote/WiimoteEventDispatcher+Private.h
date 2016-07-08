@@ -10,7 +10,7 @@
 
 @interface WiimoteEventDispatcher (Private)
 
-- (id)initWithOwner:(Wiimote*)owner;
+- (id)initWithOwner:(Wiimote *)owner;
 
 - (void)postConnectedNotification;
 - (void)postDisconnectNotification;

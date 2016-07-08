@@ -12,20 +12,20 @@
 
 @protocol VHIDDeviceDelegate
 
-- (void)VHIDDevice:(VHIDDevice*)device stateChanged:(NSData*)state;
+- (void)VHIDDevice:(VHIDDevice *)device stateChanged:(NSData *)state;
 
 @end
 
 @interface VHIDDevice : NSObject
 {
-    @private
-        NSData                  *m_Descriptor;
-        NSMutableData           *m_State;
-        id<VHIDDeviceDelegate>   m_Delegate;
+  @private
+    NSData *m_Descriptor;
+    NSMutableData *m_State;
+    id<VHIDDeviceDelegate> m_Delegate;
 }
 
-- (NSData*)descriptor;
-- (NSData*)state;
+- (NSData *)descriptor;
+- (NSData *)state;
 
 - (void)reset;
 
@@ -77,7 +77,8 @@ typedef enum VHIDJoystickAxisValueType {
 
 @interface VHIDMutableJoystickAxisSet : VHIDJoystickAxisSet
 
-- (void)add:(VHIDJoystickAxisType)axis valueType:(VHIDJoystickAxisValueType)valueType;
+- (void)add:(VHIDJoystickAxisType)axis
+    valueType:(VHIDJoystickAxisValueType)valueType;
 - (void)remove:(VHIDJoystickAxisType)axis;
 
 @end
@@ -87,10 +88,10 @@ typedef enum VHIDJoystickAxisValueType {
 @interface VHIDJoystick : VHIDDevice
 
 - (id)initWithButtonCount:(NSUInteger)buttonCount
-                     axes:(VHIDJoystickAxisSet*)axes;
+                     axes:(VHIDJoystickAxisSet *)axes;
 
 - (NSUInteger)buttonCount;
-- (VHIDJoystickAxisSet*)axes;
+- (VHIDJoystickAxisSet *)axes;
 
 - (BOOL)isButtonPressed:(NSUInteger)button;
 - (void)setButton:(NSUInteger)button pressed:(BOOL)pressed;
@@ -104,7 +105,8 @@ typedef enum VHIDJoystickAxisValueType {
 
 @end
 
-int main(int argC, char *argV[])
+int
+main(int argC, char *argV[])
 {
-    return NSApplicationMain(argC, (const char**)argV);
+    return NSApplicationMain(argC, (const char **)argV);
 }

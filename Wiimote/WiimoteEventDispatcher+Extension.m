@@ -10,7 +10,7 @@
 
 @implementation WiimoteEventDispatcher (Extension)
 
-- (void)postExtensionConnectedNotification:(WiimoteExtension*)extension
+- (void)postExtensionConnectedNotification:(WiimoteExtension *)extension
 {
     [[self delegate] wiimote:[self owner] extensionConnected:extension];
 
@@ -19,7 +19,7 @@
                        key:WiimoteExtensionKey];
 }
 
-- (void)postExtensionDisconnectedNotification:(WiimoteExtension*)extension
+- (void)postExtensionDisconnectedNotification:(WiimoteExtension *)extension
 {
     [[self delegate] wiimote:[self owner] extensionDisconnected:extension];
 

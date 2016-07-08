@@ -6,15 +6,16 @@
 //  Copyright (c) 2012 alxn1. All rights reserved.
 //
 
+#import <Wiimote/WiimoteAccelerometer.h>
 #import <Wiimote/WiimoteDelegate.h>
 #import <Wiimote/WiimoteExtension.h>
-#import <Wiimote/WiimoteAccelerometer.h>
 #import <Wiimote/WiimoteWatchdog.h>
 
 FOUNDATION_EXPORT NSString *WiimoteBeginDiscoveryNotification;
 FOUNDATION_EXPORT NSString *WiimoteEndDiscoveryNotification;
 
-FOUNDATION_EXPORT NSString *WiimoteUseOneButtonClickConnectionChangedNotification;
+FOUNDATION_EXPORT NSString
+    *WiimoteUseOneButtonClickConnectionChangedNotification;
 
 FOUNDATION_EXPORT NSString *WiimoteUseOneButtonClickConnectionKey;
 
@@ -30,25 +31,25 @@ FOUNDATION_EXPORT NSString *WiimoteUseOneButtonClickConnectionKey;
 
 @interface Wiimote : NSObject
 {
-	@private
-		WiimoteDevice               *m_Device;
-        WiimotePartSet              *m_PartSet;
-        NSString                    *m_ModelName;
+  @private
+    WiimoteDevice *m_Device;
+    WiimotePartSet *m_PartSet;
+    NSString *m_ModelName;
 
-        WiimoteIRPart               *m_IRPart;
-        WiimoteLEDPart              *m_LEDPart;
-        WiimoteButtonPart           *m_ButtonPart;
-        WiimoteBatteryPart          *m_BatteryPart;
-        WiimoteVibrationPart        *m_VibrationPart;
-        WiimoteAccelerometerPart    *m_AccelerometerPart;
-        WiimoteExtensionPart        *m_ExtensionPart;
+    WiimoteIRPart *m_IRPart;
+    WiimoteLEDPart *m_LEDPart;
+    WiimoteButtonPart *m_ButtonPart;
+    WiimoteBatteryPart *m_BatteryPart;
+    WiimoteVibrationPart *m_VibrationPart;
+    WiimoteAccelerometerPart *m_AccelerometerPart;
+    WiimoteExtensionPart *m_ExtensionPart;
 
-		NSDictionary                *m_UserInfo;
+    NSDictionary *m_UserInfo;
 }
 
 + (BOOL)isBluetoothEnabled;
 
-+ (NSArray*)supportedModelNames;
++ (NSArray *)supportedModelNames;
 
 + (BOOL)isUseOneButtonClickConnection;
 + (void)setUseOneButtonClickConnection:(BOOL)useOneButtonClickConnection;
@@ -56,7 +57,7 @@ FOUNDATION_EXPORT NSString *WiimoteUseOneButtonClickConnectionKey;
 + (BOOL)isDiscovering;
 + (BOOL)beginDiscovery;
 
-+ (NSArray*)connectedDevices;
++ (NSArray *)connectedDevices;
 
 - (BOOL)isConnected;
 - (void)disconnect;
@@ -64,9 +65,9 @@ FOUNDATION_EXPORT NSString *WiimoteUseOneButtonClickConnectionKey;
 - (BOOL)isWiiUProController;
 - (BOOL)isBalanceBoard;
 
-- (NSData*)address;
-- (NSString*)addressString;
-- (NSString*)modelName;
+- (NSData *)address;
+- (NSString *)addressString;
+- (NSString *)modelName;
 
 - (void)playConnectEffect;
 
@@ -86,11 +87,11 @@ FOUNDATION_EXPORT NSString *WiimoteUseOneButtonClickConnectionKey;
 - (BOOL)isIREnabled;
 - (void)setIREnabled:(BOOL)enabled;
 
-- (WiimoteIRPoint*)irPoint:(NSUInteger)index;
+- (WiimoteIRPoint *)irPoint:(NSUInteger)index;
 
-- (WiimoteAccelerometer*)accelerometer;
+- (WiimoteAccelerometer *)accelerometer;
 
-- (WiimoteExtension*)connectedExtension;
+- (WiimoteExtension *)connectedExtension;
 
 - (void)detectMotionPlus;
 - (void)reconnectExtension;
@@ -103,8 +104,8 @@ FOUNDATION_EXPORT NSString *WiimoteUseOneButtonClickConnectionKey;
 - (BOOL)isStateChangeNotificationsEnabled;
 - (void)setStateChangeNotificationsEnabled:(BOOL)enabled;
 
-- (NSDictionary*)userInfo;
-- (void)setUserInfo:(NSDictionary*)userInfo;
+- (NSDictionary *)userInfo;
+- (void)setUserInfo:(NSDictionary *)userInfo;
 
 - (id)delegate;
 - (void)setDelegate:(id)delegate;

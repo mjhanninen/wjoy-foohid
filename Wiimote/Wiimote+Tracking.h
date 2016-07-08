@@ -10,8 +10,8 @@
 
 @interface Wiimote (Tracking)
 
-+ (NSArray*)connectedWiimotes;
-+ (void)wiimoteConnected:(Wiimote*)wiimote;
-+ (void)wiimoteDisconnected:(Wiimote*)wiimote;
++ (NSArray *)connectedWiimotes;
++ (void)wiimoteConnected:(Wiimote *)wiimote;
++ (void)wiimoteDisconnected:(Wiimote *)wiimote;
 
 @end

@@ -6,10 +6,11 @@
 //  Copyright 2012 alxn1. All rights reserved.
 //
 
-#import "UserNotificationCenterProtected.h"
 #import "NotificationSystem.h"
+#import "UserNotificationCenterProtected.h"
 
-@interface OwnUserNotificationCenter : UserNotificationCenter<NotificationSystemDelegate>
+@interface OwnUserNotificationCenter
+    : UserNotificationCenter <NotificationSystemDelegate>
 {
 }
 

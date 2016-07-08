@@ -13,13 +13,13 @@
 
 @interface WiimoteExtension : NSObject
 {
-	@private
-		Wiimote                 *m_Owner;
-        WiimoteEventDispatcher  *m_EventDispatcher;
+  @private
+    Wiimote *m_Owner;
+    WiimoteEventDispatcher *m_EventDispatcher;
 }
 
-- (Wiimote*)owner;
+- (Wiimote *)owner;
 
-- (NSString*)name;
+- (NSString *)name;
 
 @end

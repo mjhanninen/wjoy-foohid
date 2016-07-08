@@ -17,20 +17,20 @@ FOUNDATION_EXPORT NSString *WiimoteDeviceNameBalanceBoard;
 
 @interface WiimoteInquiry : NSObject
 {
-    @private
-        BOOL                      m_IsUseOneButtonClickConnection;
+  @private
+    BOOL m_IsUseOneButtonClickConnection;
 
-        IOBluetoothDeviceInquiry *m_Inquiry;
-        id                        m_Target;
-        SEL                       m_Action;
+    IOBluetoothDeviceInquiry *m_Inquiry;
+    id m_Target;
+    SEL m_Action;
 }
 
 + (BOOL)isBluetoothEnabled;
 
-+ (WiimoteInquiry*)sharedInquiry;
++ (WiimoteInquiry *)sharedInquiry;
 
-+ (NSArray*)supportedModelNames;
-+ (void)registerSupportedModelName:(NSString*)name;
++ (NSArray *)supportedModelNames;
++ (void)registerSupportedModelName:(NSString *)name;
 
 - (BOOL)isStarted;
 - (BOOL)startWithTarget:(id)target didEndAction:(SEL)action;

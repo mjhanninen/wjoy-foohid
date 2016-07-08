@@ -10,11 +10,11 @@
 
 @implementation UserActivityNotifier
 
-+ (UserActivityNotifier*)sharedNotifier
++ (UserActivityNotifier *)sharedNotifier
 {
     static UserActivityNotifier *result = nil;
 
-    if(result == nil)
+    if (result == nil)
         result = [[UserActivityNotifier alloc] init];
 
     return result;
@@ -23,7 +23,7 @@
 - (id)init
 {
     self = [super init];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
     m_LastNotifyTime = [[NSDate alloc] init];
@@ -40,7 +40,7 @@
 {
     NSDate *now = [NSDate date];
 
-    if([now timeIntervalSinceDate:m_LastNotifyTime] >= 5.0)
+    if ([now timeIntervalSinceDate:m_LastNotifyTime] >= 5.0)
     {
         UpdateSystemActivity(UsrActivity);
 

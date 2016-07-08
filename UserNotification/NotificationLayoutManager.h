@@ -12,14 +12,15 @@
 {
 }
 
-+ (NotificationLayoutManager*)managerWithScreenCorner:(UserNotificationCenterScreenCorner)screenCorner;
++ (NotificationLayoutManager *)managerWithScreenCorner:
+    (UserNotificationCenterScreenCorner)screenCorner;
 
 - (UserNotificationCenterScreenCorner)screenCorner;
 
-- (BOOL)hasSpaceForNotification:(UserNotification*)notification
-            activeNotifications:(NSArray*)activeNotifications
-                           rect:(NSRect*)resultRect
-                          index:(NSUInteger*)index;
+- (BOOL)hasSpaceForNotification:(UserNotification *)notification
+            activeNotifications:(NSArray *)activeNotifications
+                           rect:(NSRect *)resultRect
+                          index:(NSUInteger *)index;
 
 @end
 
@@ -28,17 +29,17 @@
 - (NSRect)screenRect;
 
 - (BOOL)hasSpaceBeforeFirst:(NSRect)bestRect
-        activeNotifications:(NSArray*)activeNotifications
-                       rect:(NSRect*)resultRect;
+        activeNotifications:(NSArray *)activeNotifications
+                       rect:(NSRect *)resultRect;
 
 - (BOOL)hasSpaceBetween:(NSRect)bestRect
               firstRect:(NSRect)firstRect
              secondRect:(NSRect)secondRect
-    activeNotifications:(NSArray*)activeNotifications
-                   rect:(NSRect*)resultRect;
+    activeNotifications:(NSArray *)activeNotifications
+                   rect:(NSRect *)resultRect;
 
 - (BOOL)hasSpaceAfterLast:(NSRect)bestRect
-      activeNotifications:(NSArray*)activeNotifications
-                     rect:(NSRect*)resultRect;
+      activeNotifications:(NSArray *)activeNotifications
+                     rect:(NSRect *)resultRect;
 
 @end

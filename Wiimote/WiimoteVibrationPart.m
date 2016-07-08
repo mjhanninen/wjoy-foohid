@@ -7,36 +7,27 @@
 //
 
 #import "WiimoteVibrationPart.h"
+#import "WiimoteDevice.h"
 #import "WiimoteEventDispatcher+Vibration.h"
 #import "WiimoteLEDPart.h"
-#import "WiimoteDevice.h"
 
 @implementation WiimoteVibrationPart
 
-+ (void)load
-{
-    [WiimotePart registerPartClass:[WiimoteVibrationPart class]];
-}
++ (void)load { [WiimotePart registerPartClass:[WiimoteVibrationPart class]]; }
 
-- (BOOL)isVibrationEnabled
-{
-    return [m_Device isVibrationEnabled];
-}
+- (BOOL)isVibrationEnabled { return [m_Device isVibrationEnabled]; }
 
 - (void)setVibrationEnabled:(BOOL)enabled
 {
-    if([self isVibrationEnabled] == enabled)
+    if ([self isVibrationEnabled] == enabled)
         return;
 
-	if(![m_Device setVibrationEnabled:enabled])
+    if (![m_Device setVibrationEnabled:enabled])
         return;
 
     [[self eventDispatcher] postVibrationStateChangedNotification:enabled];
 }
 
-- (void)setDevice:(WiimoteDevice*)device
-{
-	m_Device = device;
-}
+- (void)setDevice:(WiimoteDevice *)device { m_Device = device; }
 
 @end

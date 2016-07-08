@@ -9,21 +9,24 @@
 #import <Foundation/Foundation.h>
 
 FOUNDATION_EXPORT NSString *WiimoteMotionPlusSubExtensionConnectedNotification;
-FOUNDATION_EXPORT NSString *WiimoteMotionPlusSubExtensionDisconnectedNotification;
+FOUNDATION_EXPORT NSString
+    *WiimoteMotionPlusSubExtensionDisconnectedNotification;
 FOUNDATION_EXPORT NSString *WiimoteMotionPlusReportNotification;
 
 FOUNDATION_EXPORT NSString *WiimoteMotionPlusSubExtensionKey;
 FOUNDATION_EXPORT NSString *WiimoteMotionPlusReportKey;
 
-typedef struct {
-	uint16_t                    speed;
-	BOOL                        isSlowMode;
+typedef struct
+{
+    uint16_t speed;
+    BOOL isSlowMode;
 } WiimoteMotionPlusAngleSpeed;
 
-typedef struct {
-	WiimoteMotionPlusAngleSpeed yaw;
-	WiimoteMotionPlusAngleSpeed roll;
-	WiimoteMotionPlusAngleSpeed pitch;
+typedef struct
+{
+    WiimoteMotionPlusAngleSpeed yaw;
+    WiimoteMotionPlusAngleSpeed roll;
+    WiimoteMotionPlusAngleSpeed pitch;
 } WiimoteMotionPlusReport;
 
 @class Wiimote;
@@ -31,9 +34,9 @@ typedef struct {
 
 @protocol WiimoteMotionPlusProtocol
 
-- (const WiimoteMotionPlusReport*)lastReport;
+- (const WiimoteMotionPlusReport *)lastReport;
 
-- (WiimoteExtension*)subExtension;
+- (WiimoteExtension *)subExtension;
 - (void)disconnectSubExtension;
 - (void)deactivate;
 
@@ -43,16 +46,16 @@ typedef WiimoteExtension<WiimoteMotionPlusProtocol> WiimoteMotionPlusExtension;
 
 @interface NSObject (WiimoteMotionPlusDelegate)
 
-- (void)			wiimote:(Wiimote*)wiimote
-				 motionPlus:(WiimoteMotionPlusExtension*)motionPlus
-	  subExtensionConnected:(WiimoteExtension*)extension;
+- (void)wiimote:(Wiimote *)wiimote
+               motionPlus:(WiimoteMotionPlusExtension *)motionPlus
+    subExtensionConnected:(WiimoteExtension *)extension;
 
-- (void)			wiimote:(Wiimote*)wiimote
-				 motionPlus:(WiimoteMotionPlusExtension*)motionPlus
-   subExtensionDisconnected:(WiimoteExtension*)extension;
+- (void)wiimote:(Wiimote *)wiimote
+                  motionPlus:(WiimoteMotionPlusExtension *)motionPlus
+    subExtensionDisconnected:(WiimoteExtension *)extension;
 
-- (void)			wiimote:(Wiimote*)wiimote
-				 motionPlus:(WiimoteMotionPlusExtension*)motionPlus
-					 report:(const WiimoteMotionPlusReport*)report;
+- (void)wiimote:(Wiimote *)wiimote
+     motionPlus:(WiimoteMotionPlusExtension *)motionPlus
+         report:(const WiimoteMotionPlusReport *)report;
 
 @end

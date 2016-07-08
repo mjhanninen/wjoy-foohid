@@ -6,14 +6,14 @@
 //  Copyright 2012 alxn1. All rights reserved.
 //
 
-#import "WiimoteEventDispatcher.h"
 #import "WiimoteBalanceBoardDelegate.h"
+#import "WiimoteEventDispatcher.h"
 
 @class WiimoteBalanceBoard;
 
 @interface WiimoteEventDispatcher (BalanceBoard)
 
-- (void)postBalanceBoard:(WiimoteBalanceBoard*)balanceBoard
+- (void)postBalanceBoard:(WiimoteBalanceBoard *)balanceBoard
             topLeftPress:(double)topLeft
            topRightPress:(double)topRight
          bottomLeftPress:(double)bottomLeft

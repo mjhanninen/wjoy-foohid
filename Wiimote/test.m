@@ -8,7 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-int main(int argC, const char *argV[])
+int
+main(int argC, const char *argV[])
 {
     // http://abstrakraft.org/cwiid/browser/wminput/plugins/ir_ptr/ir_ptr.c -
     // reimplement this ;) it's IR pointing algo

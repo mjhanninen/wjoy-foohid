@@ -10,22 +10,22 @@
 
 @interface WiimoteExtensionProbeHandler : NSObject
 {
-    @private
-        id       m_Target;
-        SEL      m_Action;
+  @private
+    id m_Target;
+    SEL m_Action;
 }
 
-+ (void)routineProbe:(WiimoteIOManager*)manager
-           signature:(NSData*)signature
++ (void)routineProbe:(WiimoteIOManager *)manager
+           signature:(NSData *)signature
               target:(id)target
               action:(SEL)action;
 
-+ (void)routineProbe:(WiimoteIOManager*)manager
-		  signatures:(NSArray*)signatures
++ (void)routineProbe:(WiimoteIOManager *)manager
+          signatures:(NSArray *)signatures
               target:(id)target
               action:(SEL)action;
 
-- (id)initWithIOManager:(WiimoteIOManager*)manager
+- (id)initWithIOManager:(WiimoteIOManager *)manager
                  target:(id)target
                  action:(SEL)action;
 

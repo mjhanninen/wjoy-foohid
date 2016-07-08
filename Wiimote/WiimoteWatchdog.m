@@ -11,8 +11,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-NSString *WiimoteWatchdogEnabledChangedNotification  = @"WiimoteWatchdogEnabledChangedNotification";
-NSString *WiimoteWatchdogPingNotification            = @"WiimoteWatchdogPingNotification";
+NSString *WiimoteWatchdogEnabledChangedNotification =
+    @"WiimoteWatchdogEnabledChangedNotification";
+NSString *WiimoteWatchdogPingNotification = @"WiimoteWatchdogPingNotification";
 
 @interface WiimoteWatchdog (PrivatePart)
 
@@ -20,17 +21,17 @@ NSString *WiimoteWatchdogPingNotification            = @"WiimoteWatchdogPingNoti
 
 - (void)onTimer:(id)sender;
 
-- (void)applicationWillTerminateNotification:(NSNotification*)notification;
+- (void)applicationWillTerminateNotification:(NSNotification *)notification;
 
 @end
 
 @implementation WiimoteWatchdog
 
-+ (WiimoteWatchdog*)sharedWatchdog
++ (WiimoteWatchdog *)sharedWatchdog
 {
     static WiimoteWatchdog *result = nil;
 
-    if(result == nil)
+    if (result == nil)
         result = [[WiimoteWatchdog alloc] initInternal];
 
     return result;
@@ -49,17 +50,14 @@ NSString *WiimoteWatchdogPingNotification            = @"WiimoteWatchdogPingNoti
     [super dealloc];
 }
 
-- (BOOL)isEnabled
-{
-    return (m_Timer != nil);
-}
+- (BOOL)isEnabled { return (m_Timer != nil); }
 
 - (void)setEnabled:(BOOL)enabled
 {
-    if([self isEnabled] == enabled)
+    if ([self isEnabled] == enabled)
         return;
 
-    if(enabled)
+    if (enabled)
     {
         m_Timer = [NSTimer scheduledTimerWithTimeInterval:2.5
                                                    target:self
@@ -67,13 +65,14 @@ NSString *WiimoteWatchdogPingNotification            = @"WiimoteWatchdogPingNoti
                                                  userInfo:nil
                                                   repeats:YES];
 
-        [[NSRunLoop currentRunLoop] addTimer:m_Timer forMode:NSRunLoopCommonModes];
+        [[NSRunLoop currentRunLoop] addTimer:m_Timer
+                                     forMode:NSRunLoopCommonModes];
 
         [[NSNotificationCenter defaultCenter]
-                                addObserver:self
-                                   selector:@selector(applicationWillTerminateNotification:)
-                                       name:NSApplicationWillTerminateNotification
-                                     object:nil];
+            addObserver:self
+               selector:@selector(applicationWillTerminateNotification:)
+                   name:NSApplicationWillTerminateNotification
+                 object:nil];
     }
     else
     {
@@ -82,18 +81,15 @@ NSString *WiimoteWatchdogPingNotification            = @"WiimoteWatchdogPingNoti
         m_Timer = nil;
     }
 
-    if(m_IsPingNotificationEnabled)
+    if (m_IsPingNotificationEnabled)
     {
         [[NSNotificationCenter defaultCenter]
-                                postNotificationName:WiimoteWatchdogEnabledChangedNotification
-                                              object:self];
+            postNotificationName:WiimoteWatchdogEnabledChangedNotification
+                          object:self];
     }
 }
 
-- (BOOL)isPingNotificationEnabled
-{
-    return m_IsPingNotificationEnabled;
-}
+- (BOOL)isPingNotificationEnabled { return m_IsPingNotificationEnabled; }
 
 - (void)setPingNotificationEnabled:(BOOL)enabled
 {
@@ -107,10 +103,10 @@ NSString *WiimoteWatchdogPingNotification            = @"WiimoteWatchdogPingNoti
 - (id)initInternal
 {
     self = [super init];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
-    m_Timer                     = nil;
+    m_Timer = nil;
     m_IsPingNotificationEnabled = YES;
 
     return self;
@@ -118,26 +114,26 @@ NSString *WiimoteWatchdogPingNotification            = @"WiimoteWatchdogPingNoti
 
 - (void)onTimer:(id)sender
 {
-    NSArray     *connectedDevices   = [Wiimote connectedDevices];
-    NSUInteger   countDevices       = [connectedDevices count];
+    NSArray *connectedDevices = [Wiimote connectedDevices];
+    NSUInteger countDevices = [connectedDevices count];
 
-    for(NSUInteger i = 0; i < countDevices; i++)
+    for (NSUInteger i = 0; i < countDevices; i++)
     {
         Wiimote *device = [connectedDevices objectAtIndex:i];
         [device requestUpdateState];
     }
 
     [[NSNotificationCenter defaultCenter]
-                            postNotificationName:WiimoteWatchdogPingNotification
-                                          object:self];
+        postNotificationName:WiimoteWatchdogPingNotification
+                      object:self];
 }
 
-- (void)applicationWillTerminateNotification:(NSNotification*)notification
+- (void)applicationWillTerminateNotification:(NSNotification *)notification
 {
-    NSArray     *connectedDevices   = [[[Wiimote connectedDevices] copy] autorelease];
-    NSUInteger   countDevices       = [connectedDevices count];
+    NSArray *connectedDevices = [[[Wiimote connectedDevices] copy] autorelease];
+    NSUInteger countDevices = [connectedDevices count];
 
-    for(NSUInteger i = 0; i < countDevices; i++)
+    for (NSUInteger i = 0; i < countDevices; i++)
         [[connectedDevices objectAtIndex:i] disconnect];
 }
 

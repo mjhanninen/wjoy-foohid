@@ -10,12 +10,11 @@
 #import <UserNotification/UserNotificationCenter.h>
 #import <UserNotification/UserNotificationCenterScreenCornerView.h>
 
-typedef enum
-{
-    NotificationSystemTypeApple     = 1,
-    NotificationSystemTypeGrowl     = 2,
-    NotificationSystemTypeInternal  = 3,
-    NotificationSystemTypeBest      = 4
+typedef enum {
+    NotificationSystemTypeApple = 1,
+    NotificationSystemTypeGrowl = 2,
+    NotificationSystemTypeInternal = 3,
+    NotificationSystemTypeBest = 4
 } NotificationSystemType;
 
 @interface MainController (Private)
@@ -37,19 +36,19 @@ typedef enum
 - (void)awakeFromNib
 {
     [[NSNotificationCenter defaultCenter]
-                                addObserver:self
-                                   selector:@selector(notificationClicked:)
-                                       name:UserNotificationClickedNotification
-                                     object:nil];
+        addObserver:self
+           selector:@selector(notificationClicked:)
+               name:UserNotificationClickedNotification
+             object:nil];
 
     [self updateSystemsState:self];
 
     growlAvailableCheckTimer =
-            [NSTimer scheduledTimerWithTimeInterval:1.0
-                                             target:self
-                                           selector:@selector(updateSystemsState:)
-                                           userInfo:nil
-                                            repeats:YES];
+        [NSTimer scheduledTimerWithTimeInterval:1.0
+                                         target:self
+                                       selector:@selector(updateSystemsState:)
+                                       userInfo:nil
+                                        repeats:YES];
 
     [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
     [window makeKeyAndOrderFront:self];
@@ -57,7 +56,7 @@ typedef enum
 
 - (IBAction)showNotification:(id)sender
 {
-    if([afterDelayCheckBox state] == NSOnState)
+    if ([afterDelayCheckBox state] == NSOnState)
     {
         [titleTextField setEnabled:NO];
         [textTextField setEnabled:NO];
@@ -78,9 +77,10 @@ typedef enum
         [self postNotification:self];
 }
 
-- (void)notificationClicked:(NSNotification*)notification
+- (void)notificationClicked:(NSNotification *)notification
 {
-    NSBeginAlertSheet(@"Clicked!", @"Ok", nil, nil, window, nil, nil, nil, nil, @"%@", [notification object]);
+    NSBeginAlertSheet(@"Clicked!", @"Ok", nil, nil, window, nil, nil, nil, nil,
+                      @"%@", [notification object]);
 }
 
 @end
@@ -89,29 +89,32 @@ typedef enum
 
 - (void)updateSystemsState:(id)sender
 {
-    if(![notificationSystemMatrix isEnabled])
+    if (![notificationSystemMatrix isEnabled])
         return;
 
     BOOL isAvailable = [[UserNotificationCenter withName:@"growl"] isAvailable];
 
-    [[notificationSystemMatrix cellWithTag:NotificationSystemTypeGrowl] setEnabled:isAvailable];
-    if(!isAvailable && [notificationSystemMatrix selectedTag] == NotificationSystemTypeGrowl)
+    [[notificationSystemMatrix cellWithTag:NotificationSystemTypeGrowl]
+        setEnabled:isAvailable];
+    if (!isAvailable &&
+        [notificationSystemMatrix selectedTag] == NotificationSystemTypeGrowl)
         [notificationSystemMatrix selectCellWithTag:NotificationSystemTypeBest];
 
-    if([UserNotificationCenter withName:@"apple"] == nil)
-        [[notificationSystemMatrix cellWithTag:NotificationSystemTypeApple] setEnabled:NO];
+    if ([UserNotificationCenter withName:@"apple"] == nil)
+        [[notificationSystemMatrix cellWithTag:NotificationSystemTypeApple]
+            setEnabled:NO];
 }
 
 - (void)postNotification:(id)sender
 {
-    UserNotificationCenter  *center         = [UserNotificationCenter best];
-    UserNotification        *notification   = [UserNotification
-                                                    userNotificationWithTitle:[titleTextField stringValue]
-                                                                         text:[textTextField stringValue]];
+    UserNotificationCenter *center = [UserNotificationCenter best];
+    UserNotification *notification = [UserNotification
+        userNotificationWithTitle:[titleTextField stringValue]
+                             text:[textTextField stringValue]];
 
-    NotificationSystemType   systemType     = [notificationSystemMatrix selectedTag];
+    NotificationSystemType systemType = [notificationSystemMatrix selectedTag];
 
-    switch(systemType)
+    switch (systemType)
     {
         case NotificationSystemTypeApple:
             center = [UserNotificationCenter withName:@"apple"];
@@ -126,12 +129,17 @@ typedef enum
             break;
     }
 
-    [UserNotificationCenter setSoundEnabled:[soundEnabledCheck state] == NSOnState];
-    [center setCustomSettings:
-        [NSDictionary dictionaryWithObjectsAndKeys:
-            [NSNumber numberWithDouble:[durationSlider doubleValue]],   UserNotificationCenterTimeoutKey,
-            [NSNumber numberWithInt:[cornerView screenCorner]],         UserNotificationCenterScreenCornerKey,
-            nil]];
+    [UserNotificationCenter
+        setSoundEnabled:[soundEnabledCheck state] == NSOnState];
+    [center
+        setCustomSettings:[NSDictionary
+                              dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithDouble:[durationSlider
+                                                                 doubleValue]],
+                                  UserNotificationCenterTimeoutKey,
+                                  [NSNumber
+                                      numberWithInt:[cornerView screenCorner]],
+                                  UserNotificationCenterScreenCornerKey, nil]];
 
     [center deliver:notification];
 

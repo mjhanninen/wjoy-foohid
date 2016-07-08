@@ -8,14 +8,14 @@
 
 #import "TestView.h"
 
-#import <WirtualJoy/WJoyDevice.h>
 #import <VHID/VHIDDevice.h>
+#import <WirtualJoy/WJoyDevice.h>
 
-@interface MainController : NSObject<VHIDDeviceDelegate, TestViewDelegate>
+@interface MainController : NSObject <VHIDDeviceDelegate, TestViewDelegate>
 {
-    @private
-        VHIDDevice *m_MouseState;
-        WJoyDevice *m_VirtualMouse;
+  @private
+    VHIDDevice *m_MouseState;
+    WJoyDevice *m_VirtualMouse;
 }
 
 @end

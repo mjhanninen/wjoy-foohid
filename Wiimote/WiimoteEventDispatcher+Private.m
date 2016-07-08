@@ -6,8 +6,8 @@
 //  Copyright 2012 alxn1. All rights reserved.
 //
 
-#import "WiimoteEventDispatcher+Private.h"
 #import "WiimoteDelegate.h"
+#import "WiimoteEventDispatcher+Private.h"
 
 @implementation WiimoteEventDispatcher (Private)
 
@@ -17,14 +17,14 @@
     return nil;
 }
 
-- (id)initWithOwner:(Wiimote*)owner
+- (id)initWithOwner:(Wiimote *)owner
 {
     self = [super init];
-    if(self == nil)
+    if (self == nil)
         return nil;
 
-    m_Owner                         = owner;
-    m_IsStateNotificationsEnabled   = YES;
+    m_Owner = owner;
+    m_IsStateNotificationsEnabled = YES;
 
     return self;
 }
@@ -45,9 +45,6 @@
     m_IsStateNotificationsEnabled = flag;
 }
 
-- (void)setDelegate:(id)delegate
-{
-    m_Delegate = delegate;
-}
+- (void)setDelegate:(id)delegate { m_Delegate = delegate; }
 
 @end

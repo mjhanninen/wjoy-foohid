@@ -10,27 +10,27 @@
 
 #import "HIDDevice+Private.h"
 
-NSString *HIDManagerDeviceConnectedNotification     = @"HIDManagerDeviceConnectedNotification";
-NSString *HIDManagerDeviceDisconnectedNotification  = @"HIDManagerDeviceDisconnectedNotification";
+NSString *HIDManagerDeviceConnectedNotification =
+    @"HIDManagerDeviceConnectedNotification";
+NSString *HIDManagerDeviceDisconnectedNotification =
+    @"HIDManagerDeviceDisconnectedNotification";
 
-NSString *HIDManagerDeviceKey                       = @"HIDManagerDeviceKey";
+NSString *HIDManagerDeviceKey = @"HIDManagerDeviceKey";
 
 @interface HIDManager (PrivatePart)
 
 - (void)rawDeviceConnected:(IOHIDDeviceRef)device;
-- (void)deviceConnected:(HIDDevice*)device;
+- (void)deviceConnected:(HIDDevice *)device;
 
 @end
 
 @implementation HIDManager
 
-static void HIDManagerDeviceConnected(
-                                    void            *context,
-                                    IOReturn         result,
-                                    void            *sender,
-                                    IOHIDDeviceRef   device)
+static void
+HIDManagerDeviceConnected(void *context, IOReturn result, void *sender,
+                          IOHIDDeviceRef device)
 {
-    HIDManager *manager = (HIDManager*)context;
+    HIDManager *manager = (HIDManager *)context;
 
     [manager rawDeviceConnected:device];
 }
@@ -45,26 +45,27 @@ static void HIDManagerDeviceConnected(
 {
     self = [super init];
 
-    if(self == nil)
+    if (self == nil)
         return nil;
 
-    m_Handle            = IOHIDManagerCreate(kCFAllocatorDefault, 0);
-    m_ConnectedDevices  = [[NSMutableSet alloc] init];
+    m_Handle = IOHIDManagerCreate(kCFAllocatorDefault, 0);
+    m_ConnectedDevices = [[NSMutableSet alloc] init];
 
-    if(m_Handle == nil)
+    if (m_Handle == nil)
     {
         [self release];
         return nil;
     }
 
-    IOHIDManagerSetDeviceMatching(m_Handle, (CFDictionaryRef)[NSDictionary dictionary]);
-    IOHIDManagerRegisterDeviceMatchingCallback(m_Handle, HIDManagerDeviceConnected, self);
-    IOHIDManagerScheduleWithRunLoop(
-                                m_Handle,
-                                [[NSRunLoop currentRunLoop] getCFRunLoop],
-                                (CFStringRef)NSRunLoopCommonModes);
+    IOHIDManagerSetDeviceMatching(m_Handle,
+                                  (CFDictionaryRef)[NSDictionary dictionary]);
+    IOHIDManagerRegisterDeviceMatchingCallback(m_Handle,
+                                               HIDManagerDeviceConnected, self);
+    IOHIDManagerScheduleWithRunLoop(m_Handle,
+                                    [[NSRunLoop currentRunLoop] getCFRunLoop],
+                                    (CFStringRef)NSRunLoopCommonModes);
 
-    if(IOHIDManagerOpen(m_Handle, kIOHIDOptionsTypeNone) != kIOReturnSuccess)
+    if (IOHIDManagerOpen(m_Handle, kIOHIDOptionsTypeNone) != kIOReturnSuccess)
     {
         [self release];
         return nil;
@@ -75,35 +76,34 @@ static void HIDManagerDeviceConnected(
 
 - (void)dealloc
 {
-    if(m_Handle != NULL)
+    if (m_Handle != NULL)
     {
         IOHIDManagerUnscheduleFromRunLoop(
-                                m_Handle,
-                                [[NSRunLoop currentRunLoop] getCFRunLoop],
-                                (CFStringRef)NSRunLoopCommonModes);
+            m_Handle, [[NSRunLoop currentRunLoop] getCFRunLoop],
+            (CFStringRef)NSRunLoopCommonModes);
 
         IOHIDManagerClose(m_Handle, 0);
         CFRelease(m_Handle);
     }
 
-    while([m_ConnectedDevices count] != 0)
+    while ([m_ConnectedDevices count] != 0)
         [[m_ConnectedDevices anyObject] invalidate];
 
     [m_ConnectedDevices release];
     [super dealloc];
 }
 
-+ (HIDManager*)manager
++ (HIDManager *)manager
 {
     static HIDManager *result = nil;
 
-    if(result == nil)
+    if (result == nil)
         result = [[HIDManager alloc] initInternal];
 
     return result;
 }
 
-- (NSSet*)connectedDevices
+- (NSSet *)connectedDevices
 {
     return [[m_ConnectedDevices retain] autorelease];
 }
@@ -114,28 +114,27 @@ static void HIDManagerDeviceConnected(
 
 - (void)rawDeviceConnected:(IOHIDDeviceRef)device
 {
-    if([m_ConnectedDevices containsObject:(id)device])
+    if ([m_ConnectedDevices containsObject:(id)device])
         return;
 
-    HIDDevice *d = [[HIDDevice alloc]
-                            initWithOwner:self
-                                deviceRef:device
-                                  options:kIOHIDOptionsTypeNone];
+    HIDDevice *d = [[HIDDevice alloc] initWithOwner:self
+                                          deviceRef:device
+                                            options:kIOHIDOptionsTypeNone];
 
     [self deviceConnected:d];
     [d release];
 }
 
-- (void)deviceConnected:(HIDDevice*)device
+- (void)deviceConnected:(HIDDevice *)device
 {
     [m_ConnectedDevices addObject:device];
 
     [[NSNotificationCenter defaultCenter]
-                            postNotificationName:HIDManagerDeviceConnectedNotification
-                                          object:self
-                                        userInfo:[NSDictionary
-                                                        dictionaryWithObject:device
-                                                                      forKey:HIDManagerDeviceKey]];
+        postNotificationName:HIDManagerDeviceConnectedNotification
+                      object:self
+                    userInfo:[NSDictionary
+                                 dictionaryWithObject:device
+                                               forKey:HIDManagerDeviceKey]];
 }
 
 @end

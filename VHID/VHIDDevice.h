@@ -8,11 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum
-{
-    VHIDDeviceTypeMouse,
-    VHIDDeviceTypeJoystick
-} VHIDDeviceType;
+typedef enum { VHIDDeviceTypeMouse, VHIDDeviceTypeJoystick } VHIDDeviceType;
 
 @class VHIDDevice;
 @class VHIDButtonCollection;
@@ -20,20 +16,20 @@ typedef enum
 
 @protocol VHIDDeviceDelegate
 
-- (void)VHIDDevice:(VHIDDevice*)device stateChanged:(NSData*)state;
+- (void)VHIDDevice:(VHIDDevice *)device stateChanged:(NSData *)state;
 
 @end
 
 @interface VHIDDevice : NSObject
 {
-    @private
-        VHIDDeviceType           m_Type;
-        VHIDButtonCollection    *m_Buttons;
-        VHIDPointerCollection   *m_Pointers;
-        NSData                  *m_Descriptor;
-        NSMutableData           *m_State;
+  @private
+    VHIDDeviceType m_Type;
+    VHIDButtonCollection *m_Buttons;
+    VHIDPointerCollection *m_Pointers;
+    NSData *m_Descriptor;
+    NSMutableData *m_State;
 
-        id<VHIDDeviceDelegate>   m_Delegate;
+    id<VHIDDeviceDelegate> m_Delegate;
 }
 
 + (NSUInteger)maxButtonCount;
@@ -59,8 +55,8 @@ typedef enum
 
 - (void)reset;
 
-- (NSData*)descriptor;
-- (NSData*)state;
+- (NSData *)descriptor;
+- (NSData *)state;
 
 - (id<VHIDDeviceDelegate>)delegate;
 - (void)setDelegate:(id<VHIDDeviceDelegate>)obj;
